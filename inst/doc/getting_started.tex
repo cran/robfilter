@@ -1,0 +1,343 @@
+\documentclass[a4paper]{scrartcl}
+%\usepackage{booktabs}
+
+\newcommand*{\robfilter}{\texttt{robfilter} }
+%===================================================================
+\title{Getting started with \robfilter}
+\author{Roland Fried and Karen Schettlinger}
+\date{}
+\begin{document}
+\maketitle
+
+%===================================================================
+\section{Introduction}
+
+\robfilter is a package of functions for robust extraction of an underlying signal from a univariate time series.
+The general idea is to approximate the data in a moving time
+window by a constant level (location-based methods) or a linear
+trend (regression-based methods). The several functions differ
+with respect to the signal characteristics and the outlier
+patterns they can deal with. Some of the procedures are available
+both for delayed filtering by approximating the signal in the
+window centre and for full online analysis by estimating the
+signal value at the end of the time window. The former versions
+generally lead to better approximations, but for the costs of a
+time delay corresponding to half a window width.
+
+%===================================================================
+\section{Overview}
+
+This package contains the following functions:\\
+\begin{tabular}{ll}
+\texttt{robreg.filter} & simple regression filters (delayed and online) \\
+\texttt{dw.filter}     & location or regression based filters working in two steps with \\
+                       & possibly different window widths (delayed and online)\\
+\texttt{hybrid.filter} & median and repeated median hybrid filters (delayed)\\
+\texttt{robust.filter} & regression filter with additional rules for outlier replacement \\
+                       & and level shift tracing (delayed and online)\\
+\texttt{wrm.filter}    & weighted repeated median filters (delayed and online)\\
+\texttt{wrm.smooth}    & weighted repeated median smoother (delayed and online)
+\end{tabular}
+
+\noindent
+A more detailed explanation of the single functions can be found
+below.
+
+%===================================================================
+\subsection{\texttt{robreg.filter}}
+
+Running medians are the classical window-based robust filtering
+procedures. They simply calculate the median of the data in each
+window for the filter output. This leads to good results only when
+the signal is approximately constant within each time window, and
+it generally leads to delayed estimates. Running medians should
+only be applied using very short time windows in case of time
+trends. Better results % a better approximation of locally linear trends.
+can be achieved by replacing the median by a robust regression
+method.
+
+The \texttt{robreg.filter} function applies  simple robust linear
+regression for fitting a straight line to the data within each time
+window and estimates the current level of the time series either by
+the fitted value in the window centre (\texttt{online=FALSE} where
+\texttt{width} must be odd) or by the fitted value at the recent
+most time point within the time window (option
+\texttt{online=TRUE}).
+
+Possible options for the robust regression (\texttt{method})
+applied within one window are: the repeated median of Siegel
+(1982) (\texttt{"RM"}), least median of squares (\texttt{"LMS"};
+Hampel, 1975; Rousseeuw, 1984), least trimmed squares
+(\texttt{"LTS"}; Rousseeuw, 1983), least quartile differences
+(\texttt{"LQD"}; Croux, Rousseeuw and H\"{o}ssjer, 1994) and deepest
+regression (\texttt{"DR"}; Rousseeuw and Hubert, 1999). For
+comparison, the simple running median can also be calculated
+setting \texttt{method="MED"}.
+
+Comparisons of the performance of certain of the above named
+methods can be found in Fried and Gather (2002) and Davies, Fried
+and Gather (2004)  for the delayed filter versions, and in Gather,
+Schettlinger and Fried (2006) for the online versions. Fast
+algorithms for the running \texttt{RM} and \texttt{LQD} are
+described by Bernholt and Fried (2003) and Bernholt, Nunkesser and
+Schettlinger (2007), respectively.
+
+%===================================================================
+\subsection{\texttt{dw.filter}}
+
+Double window filters improve on simple regression-based filters
+at the occurrence of level shifts. They are based on the idea of
+trimming all observations deviating too much from a rough initial
+fit obtained from a possibly shorter inner time window (Bernholt,
+Fried, Gather, Wegener, 2006). Only the observations which have
+not been trimmed in this preliminary step are included in the
+calculation of the final filter output. Both location-based and
+regression-based procedures have been implemented, as well as full
+online and delayed versions.
+
+
+%===================================================================
+\subsection{\texttt{hybrid.filter}}
+
+Repeated median hybrid filters further improve the preservation of
+level shifts and local extremes of the signal value ('turning
+points') by calculating several subfilters from different parts of
+the window (Fried, Bernholt, Gather, 2006). The price of this is
+reduced smoothing and robustness. Different versions of this
+approach have been designed for locally constant or locally linear
+signals, all versions working with some delay.
+
+%===================================================================
+\subsection{\texttt{robust.filter}}
+
+The function \texttt{robust.filter} uses rules for outlier and
+shift detection to improve the results of an ordinary repeated
+median filter (Fried, 2004). For this, a robust scale estimator
+and suitable multiples of the estimated standard deviation need to
+be chosen. Additionally, the window width can be allowed to be
+time-varying so that the procedure adapts itself to time-varying
+slopes and local signal characteristics. The adaption of the
+window width is described by Gather and Fried (2004). For more
+explanations on shift detection, see Fried and Gather (2007).
+
+
+%===================================================================
+\subsection{\texttt{wrm.filter}}
+
+Weighted repeated median filters weight the observations in the
+time window according to their temporal distance to the current
+target point at which the signal is estimated (Fried, Einbeck,
+Gather, 2007). This weighting allows to increase the window width as compared to
+repeated median filters, and thus it increases the
+efficiency of noise reduction without increasing the bias at level
+shifts. They can be particularly recommended for robust
+detail-preserving signal extraction without time delay.
+
+%===================================================================
+\subsection{\texttt{wrm.smooth}}
+
+Weighted repeated median smoothing can be seen as a generalisation
+of weighted repeated median filtering allowing for non-equidistant
+time points. More generally, it can be applied for robust
+non-parametric regression of a dependent variable $y$ on an
+independent (regressor) variable $x$ and preserves discontinuities
+in the regression function. Accordingly, this function needs two
+variables, a dependent and an independent one.
+
+
+
+
+\vspace{1.5cm}
+\noindent
+A comparison of some of the above named methods can be found in
+Gather and Fried (2004) (including some regression filters and
+some double window and hybrid filters) and an overview over all
+methods is given in Schettlinger, Fried and Gather (2006).
+
+%===================================================================
+\section{Contact}
+
+%In case of questions, remarks, suggestions, please contact
+
+Roland Fried\\
+Department of Statistics, University of Dortmund, 44221 Dortmund, Germany\\
+E-Mail: \texttt{fried@statistik.uni-dortmund.de}\vspace*{0.5cm}\\
+Karen Schettlinger\\
+Department of Statistics, University of Dortmund, 44221 Dortmund, Germany\\
+E-Mail: \texttt{schettlinger@statistik.uni-dortmund.de}
+
+%===================================================================
+\section{References}
+
+\renewcommand{\labelitemi}{ }
+\begin{itemize}
+\item
+Bernholt, T., Fried, R. (2003) Computing the Update of the Repeated
+Median Regression Line in Linear Time, \emph{Information Processing
+Letters} \textbf{88}(3), 111-117.
+
+\item
+Bernholt, T., Fried, R., Gather, U., Wegener, I. (2006) Modified
+Repeated Median Filters, \emph{Statistics and Computing} \textbf{16}, 177-192.
+
+\item
+Bernholt, T., Nunkesser, R., Schettlinger, K. (2007) Computing
+the Least Quartile Difference Estimator in the Plane,
+\emph{Computational Statistics and Data Analysis, Special Issue on
+Statistical Algorithms and Software}, to appear.\\
+(earlier version:
+Technical Report 51/2005, SFB 475, Universit\"{a}t Dortmund)
+
+\item
+Croux, C. and Rousseeuw, P.J., H\"{o}ssjer, O.
+(1994) Generalized S-Estimators, \emph{Journal of the American Statistical
+Association}
+\textbf{89}, 1271-1281.
+
+\item
+Davies, P.L., Fried, R., Gather, U. (2004) Robust Signal Extraction
+for On-line Monitoring Data, \emph{Journal of Statistical Planning
+and Inference} \textbf{122}, 65-78.
+
+\item
+Fried R. (2004) Robust Filtering of Time Series with Trends, \emph{Journal
+of Nonparametric Statistics} \textbf{16}(3), 313-328.
+
+\item
+Fried, R., Bernholt, T., Gather, U. (2006) Repeated Median and
+Hybrid Filters, \emph{Computational Statistics and Data Analysis} \textbf{50},
+Special Issue on 'Statistical Signal Extraction and Filtering',
+2313-2338.
+
+\item
+Fried, R., Einbeck, J., Gather, U. (2007) Weighted Repeated Median
+Smoothing and Filtering, \emph{Journal of the American Statistical
+Association}, to appear.\\
+(earlier version:
+Technical Report 33/2005, SFB 475, Universit\"{a}t Dortmund)
+
+\item
+Fried, R., Gather, U. (2002) Fast and Robust Filtering of Time Series
+with Trends, in: W. H\"{a}rdle and B. R\"{o}nz (eds.),
+\emph{Proceedings in Computational Statistics}, Physica, Heidelberg, 367-372.
+
+\item
+Fried, R., Gather, U. (2007), On Rank Tests for Shift
+Detection in Time Series, \emph{Computational Statistics and Data
+Analysis, Special Issue on Machine Learning and Robust Data
+Mining} \textbf{52}, 221-233.
+
+\item Gather U., Fried R. (2004) Methods and Algorithms for Robust
+Filtering, in: J. Antoch (ed.), \emph{Proceedings in Computational
+Statistics}, Physica, Heidelberg,  159-170.
+
+\item Gather, U., Schettlinger, K., Fried, R. (2006) Online Signal
+Extraction by Robust Linear Regression, \emph{Computational
+Statistics}, \textbf{21}(1), 33-51.
+
+\item
+Hampel, F.R. (1975) Beyond Location Parameters: Robust Concepts
+and Methods, \emph{Bulletin of the International Statistical
+Institute} \textbf{46}, 375-382.
+
+\item
+Rousseeuw, P.J.(1983) Multivariate Estimation with High Breakdown
+Point, \emph{Proceedings of the 4th Pannonian Symposium on Mathematical
+Statistics and Probability} \textbf{B}, Dordrecht, Reidel.
+
+\item Rousseeuw, P.J. (1984) Least Median of Squares Regression,
+\emph{Journal of the American Statistical Association} \textbf{79}, 871-880.
+
+\item
+Rousseeuw, P.J., Hubert, M. (1999) Regression Depth, \emph{Journal of the
+American Statistical Association} \textbf{94}, 388-402.
+
+\item
+Schettlinger, K., Fried, R., Gather, U. (2006), Robust Filters
+for Intensive Care Monitoring - Beyond the Running Median,
+\emph{Biomedizinische Technik} \textbf{51}(2), 49-56.
+
+\item
+Siegel, A.F. (1982) Robust Regression Using Repeated
+Medians, \emph{Biometrika} \textbf{69}, 242-244.
+\end{itemize}
+%===================================================================
+\end{document}
+%===================================================================
+
+
+
+
+
+
+
+
+
+Fried, R.: Robust Location Estimation under Dependence, to appear
+in: Journal of Statistical Computation and Simulation (2006).
+
+Fried, R., Gather, U.: Robust Trend Estimation for AR(1)
+Disturbances, Austrian Journal of Sta-tistics, Vol. 34 (2) (2005),
+pp. 139-151.
+
+Gather, U., Fried, R.: Robust Estimation of Scale for Local Linear
+Temporal Trends, Tatra Mountains Mathematical Publications 26
+(2003), pp. 87-101.
+
+Imhoff, M., Bauer, M., Gather, U., Fried, R.: Pattern Detection in
+Intensive Care Monitoring Time Series with Autoregressive Models:
+Influ-ence of the Model Order, Biometrical Journal 44-6 (2002),
+pp. 746-761.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tukey, J.W.: Exploratory Data Analysis, Reading, MA,
+Addison-Wesley, 1977.
+
+Heinonen, P., Neuvo, Y.: FIR-Median Hybrid Filters, IEEE
+Transactions on Acoustics, Speech, and Signal Processing 35
+(1987), pp. 832-838.
+
+Heinonen, P., Neuvo, Y.: FIR-Median Hybrid Filters with Predictive
+FIR Substructures, IEEE Transactions on Acoustics, Speech, and
+Signal Processing 36 (1988), pp. 892-899.
+
+Heinonen, P., Kalli, S., Turjanmaa, V., Neuvo, Y.: Generalized
+Median Filters for Biological Sig-nal Processing, Proceedings of
+the Seventh European Conference on Circuit Theory and Design
+(1985), pp. 283-386.
+
+Lee, Y., Kassam, S.A.: Generalized Median Fil-tering and Related
+Nonlinear Filtering Tech-niques, IEEE Transactions on Acoustics,
+Speech and Signal Processing 33 (1985), pp. 672-683.
+
+Huber, P.J.: Robust Statistics, Wiley, New York, 1981.
+
+Himayat, N., Kassam, S.A.: Approximate Per-formance Analysis of
+Edge Preserving Filters, IEEE Transactions on Signal Processing 4
+(1993), pp. 2764-2776.
+
+Rousseeuw, P.J., Croux, C.: Alternatives to the Median Absolute
+Deviation, Journal of the American Statistical Association 88
+(1993), pp. 1273-1283.
+
+Gr\"{u}bel, R.: Length of the Shorth, Annals of Sta-tistics 16 (1988),
+pp. 619-628.
+
+Rousseeuw, P.J., Leroy, A.: A Robust Scale Es-timator Based on the
+Shortest Half, Statistica Neerlandica 42 (1988), pp. 103-116.

@@ -1,0 +1,20 @@
+Tables with correctional coefficients:
+  timecor.dat -
+  sizecor.dat -
+
+Test Datasets:
+  Reasonable window widths for the given data range from 31 to 60. A
+  default of 3*sigma for outlier- and 2*sigma for shift detection
+  should be used.
+
+  signal1.txt - cutoff sawtooth
+  serie1n.txt - signal1 + N(0,1) noise
+  serie1t.txt - signal1 + T(3) noise
+
+  signal2.txt - two triangles
+  serie2n.txt - signal2 + N(0,1) noise
+  serie2t.txt - signal2 + T(3) noise
+
+  signal3.txt - piecewise smooth sine with one shift
+  serie3n.txt - signal3 + N(0,1) noise
+  serie3t.txt - signal3 + T(3) noise
