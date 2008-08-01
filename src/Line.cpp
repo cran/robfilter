@@ -104,13 +104,19 @@ double Line::getMedian(int anzLines)
       if (median_)
       {
         const int l = MEDIAN_LINKS(root->getAnzLines()-1);
-		
+	//	std::cout << "Anzahl Lines:" << root->getAnzLines() << "\n";
+    //    std::cout << "l:" << l << " links:" << links << " rechts:" << rechts << "\n";
+        
         while (l < links)
           geheNachLinks();
 
         while (l > links)
           geheNachRechts();
 
+	//	std::cout <<"----------------------\n";
+
+    //    std::cout << "l:" << l << " links:" << links << " rechts:" << rechts << "\n";
+        
       }
    }
 

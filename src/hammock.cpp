@@ -1,6 +1,6 @@
 // Es wird in keinsterweise garantiert, dass dieses Programm fehlerfrei ist.
 // Es ist daher nicht für den Einsatz in sicherheitskritischen Anwendungen
-// geeignet.
+// geeignet. Recycle allocated something using new
 
 #include "hammock.h"
 #include <iostream>
@@ -8,9 +8,27 @@
 
   RegLine Hammock::getRM(double timeZero)
   {
-    if (anzLines < 3)
-      return RegLine::nullLine;
-
+    /* The Repeated Median Algorithmn needs at least 4 lines to run correctly 
+     * if the number of lines fall below 4 the hammock must be reInitiated to 
+     * work with the getRM function. This is done by calling reInitHammock once 
+     * the number of lines increases 4 again. 
+     * The reInitHammock function first memorizes all lines in the Hammock (note not more than 3)
+     * than an reInit is Done by deleting the hammock 
+     * at last the Hammock is reInit and the lines are added to it too. 
+     * */
+	//std::cout << "start getRM anzLines:" << anzLines << "\n";
+	if (anzLines < 5){
+   		if (!initDone){
+   			needReInit = true;
+   		}
+   		return RegLine::nullLine;
+    }else {
+    	if (needReInit){
+    		reInitHammock();
+    	}
+    	initDone = false;
+    }
+    
     for (int i=0; i<anzLines; i++) {
       Line* l = lineTab->get(i);
       l->updateMedian();
@@ -19,11 +37,12 @@
 
     double *tab2 = new double[anzLines];
     
+    
     const double steigung = med.getMedian(medTab, anzLines);
 
     for (int i =0; i < anzLines; i++)
     {
-      Line *g = lineTab->get(i);
+      Line *g = lineTab->get(i);			
       tab2[i] = g->b - steigung * g->m;
     }
 
@@ -31,9 +50,69 @@
     const double y_achse = med.getMedian(tab2, anzLines);
     
     delete[] tab2;
-    
+        	
     return RegLine(y_achse, steigung);
+  
   }
+void Hammock::updateRepeatedMedian()
+{
+	//std::cout << "start updateRepeatedMedian anzLines:" << anzLines << "\n";
+	if (anzLines < 5){
+   		if (!initDone){
+   			needReInit = true;
+   		}
+   		return;
+    }else {
+    	if (needReInit){
+    		reInitHammock();
+    	}
+    	initDone = false;
+    }
+	
+		
+   
+    for (int i=0; i<anzLines; i++) {
+      	Line* l = lineTab->get(i);
+  		l->updateMedian();
+    }
+}
+
+void Hammock::reInitHammock(){
+	 
+	
+	int n = lineTab->size();
+	Line ** mem = new Line*[n];
+	for (int i = 0; i < n; i++){
+		mem[i] = lineTab->get(0);
+		lineTab->removeOldest();
+	}
+	
+	 bin.freeUsedMemory();
+	 L=bin.neu(); //new Edge();
+	 R=bin.neu(); //new Edge();
+
+	 const double x = -INF;
+
+	 Lup=L;
+
+	 L->setLine(border_L);
+	 L->set_X_pre(x,0);
+	 L->set_X_next(x,0);
+
+	 R->setLine(border_R);
+	 R->set_X_pre(x,0);
+	 R->set_X_next(x,0);
+	 
+	 needReInit = false;
+	 initDone = true;
+	 anzLines = 0;
+	// delete mem;
+	 for (int i = 0; i < n; i++){
+	 	mem[i]->resetLine();
+		addLine(mem[i]);
+	 }
+	 
+}
 
 Edge *Hammock::dissect_L(Line *neueLinie)
 {
@@ -162,8 +241,8 @@ void Hammock::computeLXX(void)
   Edge *o2,*u2;
   int lowP_o=0,lowP_u=0;
 
-  double ow,uw,w;
-
+  double ow,uw,w; 
+  w = 0; /*initialize*/
   Line *l1,*l2;
   
   //XXX! Is it right to do nothing here when k > anz?
@@ -331,15 +410,18 @@ void Hammock::removePunkt()
 
 void Hammock::addLine(Line *neuL)
 {
+  //std::cout<< "addLine: " << anzLines << ", " << windowSize << std::endl;
+  
   neuL->root = this;
-
-  if (anzLines >= windowSize)
-    delLine();
+  
+  if (anzLines >= windowSize){
+	  delLine();
+  }
 
   anzLines++;
 
   lineTab->append(neuL);
-
+    
   // In linke Begrenzung einfügen
   Edge *lose = dissect_L(neuL);
 
@@ -386,16 +468,21 @@ void Hammock::delLine(void)
 {
      
   // Flags löschen
+  //std::cout<< "delLine" << std::endl;
   L->getLine()->mark=0;
-
+  //std::cout<< "get Last Line done" << std::endl;
+  
   for (int i=0; i<anzLines; i++) {
+	     
     lineTab->get(i)->mark=0;
+    	
   }
 
+  
   int dir;
   Edge *pre = Lup->getNext(0,&dir);
-  Line *delL = pre->getLine();
-
+  Line *delL = pre->getLine(); // #### absturz stelle
+    
   anzLines--;
   delL->setMedian(0); //XXX! Is this necessary?
 
@@ -435,7 +522,7 @@ void Hammock::delLine(void)
      }
      else
      {
-       e->setPre(e_dir,0,0,0);
+      e->setPre(e_dir,0,0,0);
        bin.shred(next);
        next=0;
      }
@@ -444,8 +531,15 @@ void Hammock::delLine(void)
 
      pre=next;
   }
+    
   lineTab->removeOldest();
+  
   delete delL;
+  
+  
+  if (anzLines == 0){
+	 reInitHammock();
+  }
 }
 
 
@@ -472,9 +566,9 @@ void Hammock::delLine(void)
     
     for(int i=0; i < twiceAnzLines; i++)
       t.extend(0);
-
     for(int k=0;k<anzLines;k++)
     {
+
       for(int i=0; i<twiceAnzLines; i++)
         t.set(i,0);
 

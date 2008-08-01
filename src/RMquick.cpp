@@ -30,6 +30,6 @@ int MEDIAN_LINKS(int anz)
 #ifndef BORLAND_WIN
 int random(int a)
 {
-  return (int)(((double)rand())/((double)RAND_MAX)*a);
+  return (int)((((double)rand())/((double)RAND_MAX))*a);
 };
 #endif

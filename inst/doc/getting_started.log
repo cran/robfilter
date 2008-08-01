@@ -1,29 +1,47 @@
-This is pdfTeX, Version 3.141592-1.10b (MiKTeX 2.3) (preloaded format=latex 2000.11.28)  26 OCT 2007 16:15
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2007.12.13)  21 JUL 2008 15:27
+entering extended mode
 **getting_started.tex
-(getting_started.tex{pdftex.cfg}
-LaTeX2e <2001/06/01>
-Babel <v3.7h> and hyphenation patterns for english, french, german, ngerman, du
-mylang, nohyphenation, loaded.
-(C:\programme\texmf\tex\latex\koma-script\scrartcl.cls
-Document Class: scrartcl 2003/04/22 v2.9o LaTeX2e KOMA document class
-(C:\programme\texmf\tex\latex\koma-script\scrlfile.sty
-Package: scrlfile 2003/04/22 v2.9o LaTeX2e KOMA package
+(getting_started.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman, ngerman, french, loaded.
+("C:\Programme\MiKTeX 2.6\tex\latex\koma-script\scrartcl.cls"
+Document Class: scrartcl 2007/10/12 v2.97d KOMA-Script document class (article)
 
-Package scrlfile, 2003/04/22 v2.9o LaTeX2e KOMA package
+("C:\Programme\MiKTeX 2.6\tex\latex\koma-script\scrkbase.sty"
+Package: scrkbase 2007/10/12 v2.97d KOMA-Script package (basics and keyval use)
+
+
+("C:\Programme\MiKTeX 2.6\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Programme\MiKTeX 2.6\tex\latex\koma-script\scrlfile.sty"
+Package: scrlfile 2007/03/07 v2.97a KOMA-Script package (loading files)
+
+Package scrlfile, 2007/03/07 v2.97a KOMA-Script package (loading files)
                   Copyright (C) Markus Kohm
 
-) (C:\programme\texmf\tex\latex\base\size11.clo
-File: size11.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+))
+Class scrartcl Info: File `size11.clo' used to setup font sizes on input line 9
+00.
+ ("C:\Programme\MiKTeX 2.6\tex\latex\base\size11.clo"
+File: size11.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
 )
-(C:\programme\texmf\tex\latex\koma-script\typearea.sty
-Package: typearea 2003/04/22 v2.9o LaTeX2e KOMA package
+("C:\Programme\MiKTeX 2.6\tex\latex\koma-script\typearea.sty"
+Package: typearea 2007/10/12 v2.97d KOMA-Script package (type area)
 
-Package typearea, 2003/04/22 v2.9o LaTeX2e KOMA package
+Package typearea, 2007/10/12 v2.97d KOMA-Script package (type area)
                   Copyright (C) Frank Neukam, 1992-1994
-                  Copyright (C) Markus Kohm, 1994-2002
+                  Copyright (C) Markus Kohm, 1994-
 
 \ta@bcor=\skip41
 \ta@div=\count79
+Package scrkbase Info: You've used obsolete option `a4paper'.
+(scrkbase)             \KOMAExecuteOptions{paper=a4} will be
+(scrkbase)             used instead.
+(scrkbase)             You may simply replace `a4paper'
+(scrkbase)             by `paper=a4'.
 \ta@hblk=\skip42
 \ta@vblk=\skip43
 \ta@temp=\skip44
@@ -43,7 +61,7 @@ Package typearea Info: These are the values describing the layout:
 (typearea)              \topskip        = 11.0pt
 (typearea)              \footskip       = 47.60002pt
 (typearea)              \baselineskip   = 13.6pt
-(typearea)              on input line 625.
+(typearea)              on input line 890.
 )
 \c@part=\count80
 \c@section=\count81
@@ -51,54 +69,62 @@ Package typearea Info: These are the values describing the layout:
 \c@subsubsection=\count83
 \c@paragraph=\count84
 \c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
 \abovecaptionskip=\skip45
 \belowcaptionskip=\skip46
 \c@pti@nb@sid@b@x=\box26
+\c@figure=\count86
+\c@table=\count87
 \bibindent=\dimen102
 ) (getting_started.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
-LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <20.74> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 11.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 11.
+(Font)              <14.4> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 11.
+(Font)              <7> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 31.
+(Font)              <10.95> on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 31.
+(Font)              <8> on input line 33.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 31.
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 47.
+(Font)              <6> on input line 33.
  [1
 
 
-{psfonts.map}] [2] [3] [4] (getting_started.aux) ) 
+{psfonts.map}]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 54.
+ [2] [3] [4] [5] (getting_started.aux) ) 
 Here is how much of TeX's memory you used:
- 669 strings out of 95644
- 7985 string characters out of 1191234
- 61406 words of memory out of 1062535
- 3712 multiletter control sequences out of 35000
- 9933 words of font info for 36 fonts, out of 500000 for 1000
- 14 hyphenation exceptions out of 607
- 27i,6n,24p,154b,270s stack positions out of 1500i,500n,5000p,200000b,32768s
- 37 PDF objects out of 65536
- 0 named destinations out of 20000
- 0 words of extra memory for PDF output out of 65536
-<cmbx10.pfb><cmti10.pfb><cmmi
-10.pfb><cmr10.pfb><cmtt10.pfb><cmr12.pfb><cmtt12.pfb><cmssbx10.pfb>
-Output written on getting_started.pdf (4 pages, 72370 bytes).
+ 916 strings out of 95295
+ 12437 string characters out of 1184970
+ 73326 words of memory out of 1073954
+ 4128 multiletter control sequences out of 60000
+ 9933 words of font info for 36 fonts, out of 1000000 for 2000
+ 14 hyphenation exceptions out of 8191
+ 40i,6n,48p,793b,204s stack positions out of 5000i,500n,10000p,200000b,32768s
+<C:/Programme/MiKTeX 2.6/fonts/type1/bl
+uesky/cm/cmbx10.pfb><C:/Programme/MiKTeX 2.6/fonts/type1/bluesky/cm/cmmi10.pfb>
+<C:/Programme/MiKTeX 2.6/fonts/type1/bluesky/cm/cmr10.pfb><C:/Programme/MiKTeX 
+2.6/fonts/type1/bluesky/cm/cmr12.pfb><C:/Programme/MiKTeX 2.6/fonts/type1/blues
+ky/cm/cmssbx10.pfb><C:/Programme/MiKTeX 2.6/fonts/type1/bluesky/cm/cmti10.pfb><
+C:/Programme/MiKTeX 2.6/fonts/type1/bluesky/cm/cmtt10.pfb><C:/Programme/MiKTeX 
+2.6/fonts/type1/bluesky/cm/cmtt12.pfb>
+Output written on getting_started.pdf (5 pages, 76441 bytes).
+PDF statistics:
+ 50 PDF objects out of 300000 (max. 8388607)
+ 0 named destinations out of 300000 (max. 131072)
+ 1 words of extra memory for PDF output out of 65536 (max. 10000000)
+

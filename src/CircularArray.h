@@ -2,6 +2,7 @@
 #define CIRCULARRRAY_H
 
 #include <stdexcept>
+#include <iostream>
 
 template<typename T>
 class CircularArray {
@@ -169,10 +170,14 @@ void CircularArray<T>::removeOldest()
 template<typename T>
 T CircularArray<T>::oldest() const
 {
+  //std::cout << "entering oldest(),   len=" << len << "\n";
+            	
   if (len > 0) {
+   //  std::cout << "leaving oldest() --> normal way \n";
      return data[indexOfOldest()];
   }
   else {
+ //   std::cout << "leaving oldest() --> throwing exception \n";
     throw std::out_of_range("no such element");
   }
 }

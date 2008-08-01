@@ -7,7 +7,7 @@
  *   + Change powl() to pow()
  */
 // Changes:
-#pragma hdrstop
+//#pragma hdrstop
 
 #include "LQDAdvanced.h"
 
@@ -230,4 +230,4 @@ bool LQDAdvanced::lessFMax::operator()(const LQDAdvanced::p_cutAndInfo &firstOp,
 
 //---------------------------------------------------------------------------
 
-#pragma package(smart_init)
+//#pragma package(smart_init)

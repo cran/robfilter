@@ -13,11 +13,12 @@ class Line
    //friend class Hammock;
 
    int links2,rechts2; // werden gesetzt beim Einfügen und Löschen
-   int typ; // 0==normal, 1==left, 2==right
    
    int links,rechts; //Number of intersections on both sides of the median
    Edge *median_;    // der Pointer auf die median Kante   
 public:
+	int typ; // 0==normal, 1==left, 2==right
+	
    Hammock *root;
    int nr; //used by regDepth
 
@@ -35,6 +36,10 @@ public:
 
    double schnittX(Line *f);
    double schnittY(Line *f);
+   
+   void printLine(){
+	   std::cout << "(" << m << "," << b << ")";
+   }
 
    void setTypLeft(void)  {  typ=1; }
    void setTypRight(void) {  typ=2; }
@@ -98,6 +103,13 @@ public:
      links=0;
      rechts=0;
      startE=0;
+   }
+   void resetLine(){
+	  typ=0;
+	  median_=0;
+	  links=0;
+	  rechts=0;
+	  startE=0;
    }
 };
 

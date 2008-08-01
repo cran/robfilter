@@ -2,9 +2,6 @@
 // Programmed by Thorsten Bernholt
 // University of Dortmund
 
-
-#pragma hdrstop
-
 #include "MedianFilter.h"
 
 
@@ -32,5 +29,3 @@ double MedianFilter::getMedian()
  fenster.copyInto(temp);
  return median.getMedian(temp, fenster.size());
 }
-
-#pragma package(smart_init)

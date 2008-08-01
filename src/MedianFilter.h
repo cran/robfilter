@@ -17,7 +17,7 @@ class MedianFilter
 
   double *temp;
 
-public:
+public: 
 
   MedianFilter(int windowWidth);
        

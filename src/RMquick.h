@@ -11,6 +11,9 @@
 #include "math.h"
 #include "RMquick.h"
 #include "RegLine.h"
+#include <string>
+#include <algorithm>
+#include <iostream>
 
 void addMemo(char *t);
 
@@ -34,21 +37,57 @@ int random(int a);                // was soll hier passieren ????
 
 class Median
 {
-  double *medTab;		// Array der Median werte 
+
+/*  double *medTab;		// Array der Median werte 
   int medTabSize;       // Länge des Arrays
 
-    void vertausche(int a,int b)
+  	void vertausche(int a,int b)
     {
-     double temp=medTab[a];
-      medTab[a]=medTab[b];
-      medTab[b]=temp;
-    };
+  		double temp=medTab[a];
+      	medTab[a]=medTab[b];
+      	medTab[b]=temp;
+    };*/
     /* Ist eine Implementierung von 
      * Quickselect
      * die den Median zurückliefert ( wenn n_thElement)
      * geeignet gewählt wird)
      * */
-    double computeMedian(int L,int R,int n_thElement)
+    
+   /* int random(int a)
+    {
+      return (int)((((double)rand())/((double)RAND_MAX))*a);
+    };*/
+
+    
+
+/*
+    double computeMedian(int left, int right, int tempNthElement){
+    	int iPivot = random(right - left) + left;
+    	int l = left;
+    	int r = right-1;
+    	while (l!=r){
+    		for (;((l!=iPivot)&&(medTab[l]<=medTab[iPivot]));l++);
+    		for (;((r!=iPivot)&&(medTab[r]>=medTab[iPivot]));r--);
+    		if (l != r){
+    			vertausche(l, r);
+    			if (l == iPivot) iPivot = r;
+    			else
+    				if (r == iPivot) iPivot = l;
+    			}
+    		};
+    		int leftSideSize = iPivot - left;
+    		if (leftSideSize == tempNthElement){
+    			return medTab[iPivot];
+    		} else if (tempNthElement < leftSideSize){
+    			*//*Search in the leftSide*//*
+    			return computeMedian(left, iPivot, tempNthElement);
+    		} else if (tempNthElement > leftSideSize){
+    			*//*Search in the rightSide*//*
+    			return computeMedian(iPivot+1, right, tempNthElement-(leftSideSize+1));
+    		}
+    		return -1; // kann 
+    	}*/
+/*    double computeMedian(int L,int R,int n_thElement)
     {
        if (R-L<=0)
          return medTab[L];
@@ -100,27 +139,27 @@ class Median
        else
          return medTab[pivo];
 
-    };
+    };*/
  public:
   double getMedian(double *tab,int anz)
   {
     //XXX! This could be implemented in terms of
     //STL's nth_element:
     //http://www.sgi.com/tech/stl/nth_element.html
-         
-     medTab=tab;
-     medTabSize=anz;
-     /* falls die Anzahl der X Werte der Schnittpunkte
-      * gerade sind wird der Median als Durchschnitt
-      * der beiden Werte in der mitte gebildet
-      */
-     if (medTabSize % 2 == 0)   
-     {
-     	double median_links = computeMedian(0,medTabSize-1,MEDIAN_LINKS(medTabSize));
-     	double median_rechts = computeMedian(0,medTabSize-1,MEDIAN_LINKS(medTabSize)-1);
+     if (anz % 2 == 0)   
+     { 
+    	//double median_links = computeMedian(0,medTabSize-1,MEDIAN_LINKS(medTabSize));
+     	//double median_rechts = computeMedian(0,medTabSize-1,MEDIAN_LINKS(medTabSize)-1);
+     	std::nth_element(tab,tab + MEDIAN_LINKS(anz), tab+anz);
+     	double median_links = tab[MEDIAN_LINKS(anz)];
+     	std::nth_element(tab,tab + MEDIAN_LINKS(anz)-1, tab+anz);
+     	double median_rechts = tab[MEDIAN_LINKS(anz)-1];
      	return (median_links+median_rechts)/2.0;
-     } else return(computeMedian(0,medTabSize-1,MEDIAN_LINKS(medTabSize)));
-  };
+     } else {
+    	std::nth_element(tab,tab + MEDIAN_LINKS(anz), tab+anz);
+     	return tab[MEDIAN_LINKS(anz)];
+     }
+  }
 };
 
 class RMbase
@@ -177,9 +216,9 @@ public:
   void print(void)
   {
   };
-  char *getName(void)
+  char * getName(void)
   {
-    return((char *)"RMquick");
+    return ((char*)("RMquick"));
   };
   void addPunkt(double x,double y)
   {

@@ -49,15 +49,21 @@ robreg.filter <- function(y,                    # input time series data (numeri
   if (missing(width)){
     stop("argument 'width' is missing with no default")
   }
-  #   [ (          no integer                  ) | (width < 5) | (      even number                    ) ] & [!online]
-  if( ( (!identical(all.equal(width%%1,0),TRUE)) | (width < 5) | (identical(all.equal(width%%2,0),TRUE)) ) & (!online) ){
-    stop("argument 'width' must be an odd positive integer >= 5 for offline estimation ('online=FALSE')")
-  }
-  #   [ (          no integer                  ) | (width < 5) ] & [online]
-  if( ( (!identical(all.equal(width%%1,0),TRUE)) | (width < 5) ) & (online) ){
+  #   [ (          no integer                  ) | (width < 5) | (      even number                    ) ] & [!online] | (identical(all.equal(width%%2,0),TRUE)) ) 
+#  if( ((!identical(all.equal(width%%1,0),TRUE)) | (width < 5)) | (identical(all.equal(width%%2,0),TRUE)) & (!online) ){ 
+#    stop("argument 'width' must be an odd positive integer >= 5 for offline estimation ('online=FALSE')")
+#  }
+
+#  #   [ (          no integer                  ) | (width < 5) ] & [online]
+#  if( ( (!identical(all.equal(width%%1,0),TRUE)) | (width < 5) ) & (online) ){
+#      stop("argument 'width' must be a positive integer >= 5")
+#  }
+#  #   [ (          no integer                  ) | (width < 5) ] & [online]
+  if( ( (!identical(all.equal(width%%1,0),TRUE)) | (width < 5) ) ){
       stop("argument 'width' must be a positive integer >= 5")
   }
-
+							  
+							  
 ### FIXME: minNonNAS >= 0 !!!  (for all methods!)
   if ( (!identical(all.equal(minNonNAs%%1,0),TRUE)) | (minNonNAs < 5) ){
     stop("argument 'minNonNAs' must be an integer >= 5")
@@ -69,8 +75,9 @@ robreg.filter <- function(y,                    # input time series data (numeri
     stop("argument 'y' must contain at least 'width' elements")
   }
 
+
 #### FIXME (in C++ code): Too many subsequent missing values in the time series cause a crash
-#  wNAs <- vector(length=N-width+1)
+#  wNAs <- vector(N-width+1)
 #  for( t in 1:(N-width+1) ){
 #    wNAs[t] <- sum(is.na(y[t:(t+width-1)])) 
 #  }
@@ -83,14 +90,30 @@ robreg.filter <- function(y,                    # input time series data (numeri
 #    }
 #  }
 #### 
+
+#### Andersch:
+#  longestNAspan <- 0
+#  for ( t in 1:N ){
+#    s <- t
+#    while ( is.na(y[s]) ){
+#      s <- s+1          
+#    }
+#    if (s - t > longestNAspan) {
+#      longestNAspan <- s - t
+#    }
+#  }
+#  if (longestNAspan >= width)
+#    stop(paste("There is at least one passage of ", longestNAspan, " subsequent NAs, which is longer than width=", width, "\n",sep=""))
+####
+
   
   ## Information message + error message in case of missing values for methods which cannot handle them properly
   if( any(is.na(y)) ){ 
    cat(paste( sum(is.na(y)), "out of", N, "time series values in", ts.name, "are missing. \n"))
 ### FIXME: check C++ code of other methods than RM and MED for behaviour in the presence of missing values
-    if( any(method.names %in% c("LQD","LMS","LTS","DR")) ) {
-      stop(paste("methods other than RM and MED (rm.filter / med.filter) can not handle missing values yet"))
-    }
+#  if( any(method.names %in% c("DR")) ) {
+#     stop(paste("method DR (dr.filter) can not handle missing values yet"))
+#   }
 ###
   }
 
@@ -105,12 +128,15 @@ robreg.filter <- function(y,                    # input time series data (numeri
     level[,i] <- r[[i]]$level
     slope[,i] <- r[[i]]$slope
   }
-  
-  return( structure( list( level=as.data.frame(level), slope=as.data.frame(slope), 
+
+   if ((!all(is.na(level)))&(!all(is.na(slope)))){# die NA's waren in der Eingabe so unguenstig verteilt, dass nur NA geschätzt wurden
+        return( structure( list( level=as.data.frame(level), slope=as.data.frame(slope), 
                            y=y, width=width, method=method.names, 
                            minNonNAs=minNonNAs, online=online, extrapolate=extrapolate, ts.name=ts.name),
           class="robreg.filter")
         )
+   }
+   return (NA)
 }
 
 

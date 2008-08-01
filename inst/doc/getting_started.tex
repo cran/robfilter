@@ -2,9 +2,11 @@
 %\usepackage{booktabs}
 
 \newcommand*{\robfilter}{\texttt{robfilter} }
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2cm}
 %===================================================================
 \title{Getting started with \robfilter}
-\author{Roland Fried and Karen Schettlinger}
+\author{Matthias Borowski, Roland Fried, and Karen Schettlinger}
 \date{}
 \begin{document}
 \maketitle
@@ -12,7 +14,7 @@
 %===================================================================
 \section{Introduction}
 
-\robfilter is a package of functions for robust extraction of an underlying signal from a univariate time series.
+\robfilter is a package of functions for robust extraction of an underlying signal from time series.
 The general idea is to approximate the data in a moving time
 window by a constant level (location-based methods) or a linear
 trend (regression-based methods). The several functions differ
@@ -27,7 +29,7 @@ time delay corresponding to half a window width.
 %===================================================================
 \section{Overview}
 
-This package contains the following functions:\\
+This package contains the following functions: \vspace*{0.25cm} \\
 \begin{tabular}{ll}
 \texttt{robreg.filter} & simple regression filters (delayed and online) \\
 \texttt{dw.filter}     & location or regression based filters working in two steps with \\
@@ -35,14 +37,19 @@ This package contains the following functions:\\
 \texttt{hybrid.filter} & median and repeated median hybrid filters (delayed)\\
 \texttt{robust.filter} & regression filter with additional rules for outlier replacement \\
                        & and level shift tracing (delayed and online)\\
+\texttt{adore.filter}  & repeated median filter with adaptive choice of the window width\\
+                       & (online)\\
+\texttt{madore.filter} & multivariate repeated median-least squares filter with adaptive\\
+											 & choice of the window width (online)\\
 \texttt{wrm.filter}    & weighted repeated median filters (delayed and online)\\
 \texttt{wrm.smooth}    & weighted repeated median smoother (delayed and online)
-\end{tabular}
+\end{tabular} \vspace*{0.25cm}
 
 \noindent
 A more detailed explanation of the single functions can be found
 below.
 
+\newpage
 %===================================================================
 \subsection{\texttt{robreg.filter}}
 
@@ -120,7 +127,15 @@ slopes and local signal characteristics. The adaption of the
 window width is described by Gather and Fried (2004). For more
 explanations on shift detection, see Fried and Gather (2007).
 
+%===================================================================
+\subsection{\texttt{adore.filter}}
 
+The \texttt{adore.filter} overcomes the problem of window width choice and the accompanying bias variance trade-off for the signal level estimations by choosing the window width adaptively, depending on the current data situation. The filter produces online signal estimates (and if wanted also an accompanying robust online scale estimates) which do not require any prior parameter specification. Therefore, it provides a simple alternative to online filters applying rules for shift or change detection but require the specification of certain settings. For more details see Schettlinger, Fried and Gather (2008).
+
+%===================================================================
+\subsection{\texttt{madore.filter}}
+
+The \texttt{madore.filter} is an adaptive online filter for multivariate time series, based on repeated median and multivariate least squares regression. The test procedure of the \texttt{adore.filter} (see above) is used to adapt the window width at each time point, depending on the current data situation. The signal is estimated within the adapted time window by a slight modification of the multivariate \textit{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). In contrast to the \texttt{adore.filter}, the \texttt{madore.filter} takes account of the local correlations between the components of the multivariate time series. A more detailed description of the filter can be found in Borowski, Schettlinger, Gather (2008).
 %===================================================================
 \subsection{\texttt{wrm.filter}}
 
@@ -159,12 +174,15 @@ methods is given in Schettlinger, Fried and Gather (2006).
 
 %In case of questions, remarks, suggestions, please contact
 
+Matthias Borowski\\
+Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+E-Mail: \texttt{borowski@statistik.tu-dortmund.de}\vspace*{0.5cm}\\
 Roland Fried\\
-Department of Statistics, University of Dortmund, 44221 Dortmund, Germany\\
-E-Mail: \texttt{fried@statistik.uni-dortmund.de}\vspace*{0.5cm}\\
+Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+E-Mail: \texttt{fried@statistik.tu-dortmund.de}\vspace*{0.5cm}\\
 Karen Schettlinger\\
-Department of Statistics, University of Dortmund, 44221 Dortmund, Germany\\
-E-Mail: \texttt{schettlinger@statistik.uni-dortmund.de}
+Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+E-Mail: \texttt{schettlinger@statistik.tu-dortmund.de}
 
 %===================================================================
 \section{References}
@@ -187,6 +205,10 @@ the Least Quartile Difference Estimator in the Plane,
 Statistical Algorithms and Software}, to appear.\\
 (earlier version:
 Technical Report 51/2005, SFB 475, Universit\"{a}t Dortmund)
+
+\item
+Borowski, M., Schettlinger, K., Gather, U. (2008) Multivariate Real Time
+Signal Estraction by a Robust Adaptive Regression Filter, submitted.
 
 \item
 Croux, C. and Rousseeuw, P.J., H\"{o}ssjer, O.
@@ -227,7 +249,7 @@ Detection in Time Series, \emph{Computational Statistics and Data
 Analysis, Special Issue on Machine Learning and Robust Data
 Mining} \textbf{52}, 221-233.
 
-\item Gather U., Fried R. (2004) Methods and Algorithms for Robust
+\item Gather, U., Fried, R. (2004) Methods and Algorithms for Robust
 Filtering, in: J. Antoch (ed.), \emph{Proceedings in Computational
 Statistics}, Physica, Heidelberg,  159-170.
 
@@ -239,6 +261,11 @@ Statistics}, \textbf{21}(1), 33-51.
 Hampel, F.R. (1975) Beyond Location Parameters: Robust Concepts
 and Methods, \emph{Bulletin of the International Statistical
 Institute} \textbf{46}, 375-382.
+
+\item
+Lanius, V., Gather, U. (2007) Robust Online Signal Extraction from
+Multivariate Time Series, \emph{Technical Report 38/2007, SFB 475,
+Technische Universit\"{a}t Dortmund.}
 
 \item
 Rousseeuw, P.J.(1983) Multivariate Estimation with High Breakdown
@@ -256,6 +283,11 @@ American Statistical Association} \textbf{94}, 388-402.
 Schettlinger, K., Fried, R., Gather, U. (2006), Robust Filters
 for Intensive Care Monitoring - Beyond the Running Median,
 \emph{Biomedizinische Technik} \textbf{51}(2), 49-56.
+
+\item
+Schettlinger, K., Fried, R., Gather, U. (2008),
+Real Time Signal Processing by Adaptive Repeated Median Filters,
+\emph{International Journal of Adaptive Control and Signal Processing}, submitted.
 
 \item
 Siegel, A.F. (1982) Robust Regression Using Repeated

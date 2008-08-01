@@ -9,6 +9,8 @@
 #include <list>
 #include <algorithm>
 #include <stdexcept>
+#include <limits>
+
 
 //#include "values.h"
 //values.h is Windows-only. Using uint64_t from stdint.h in place of unsigned __int64:
@@ -185,7 +187,7 @@ class LQDAdvanced
     double cutX;
     double cutY;
     double optX;
-    double optY=DBL_MAX;
+    double optY=std::numeric_limits<double>::max();
     _noOfSols=1;
     while(lineItI != transformedInput.end())
     {
@@ -478,7 +480,7 @@ class LQDAdvanced
 
   double computeYCut(cutAndInfo a,cutAndInfo b) const
   {
-    double cutY=DBL_MAX;
+    double cutY=std::numeric_limits<double>::max();
     double slopeDiff=transformedInput[a.origin].slope-transformedInput[b.origin].slope;
     if (slopeDiff!=0) cutY=(transformedInput[a.origin].slope * transformedInput[b.origin].intercept - transformedInput[b.origin].slope * transformedInput[a.origin].intercept)/(slopeDiff);
     return cutY;
@@ -486,7 +488,7 @@ class LQDAdvanced
 
   double computeYCut(double slope1, double intercept1, double slope2, double intercept2) const
   {
-    double cutY=DBL_MAX;
+    double cutY=std::numeric_limits<double>::max();
     double slopeDiff=slope1-slope2;
     if (slopeDiff!=0) cutY=(slope1*intercept2 - slope2*intercept1)/(slopeDiff);
 //    if (cutY==0.0) printf("Sl:%f In:%f Sl:%f In:%f\n",slope1,intercept1,slope2,intercept2);
@@ -534,7 +536,7 @@ class LQDAdvanced
           cuts[index].ascending=false;
           countBelow--;
         }
-        if (xPos||(intercept==(*lineIterator).intercept)) cuts[index].value=-DBL_MAX; else cuts[index].value=DBL_MAX;
+        if (xPos||(intercept==(*lineIterator).intercept)) cuts[index].value=-std::numeric_limits<double>::max(); else cuts[index].value=std::numeric_limits<double>::max();
       }
       cuts[index].origin=count;
       count++;
@@ -566,18 +568,18 @@ class LQDAdvanced
     p_compareTo.p=&compareTo;
     compareTo.value=fmax;
     compareTo.ascending=true;
-    compareTo.origin=SHRT_MAX;
+    compareTo.origin=std::numeric_limits<short>::max();
     vector<p_cutAndInfo>::iterator sortEnd=partition(cutp.begin(),cutp.end(),bind2nd(less<p_cutAndInfo>(),p_compareTo));
     vector<p_cutAndInfo>::iterator sameLine=cutp.begin();
     while (sameLine!=sortEnd)
     {
-      if (((*sameLine).p->value==-DBL_MAX) || (((*sameLine).p->value==0.0) && (transformedInput[(*sameLine).p->origin].slope<=0.0) && (transformedInput[(*sameLine).p->origin].slope>transformedInput[opt].slope))) sameLines++;
+      if (((*sameLine).p->value==-std::numeric_limits<double>::max()) || (((*sameLine).p->value==0.0) && (transformedInput[(*sameLine).p->origin].slope<=0.0) && (transformedInput[(*sameLine).p->origin].slope>transformedInput[opt].slope))) sameLines++;
       sameLine++;
     }
     actLevel+=sameLines;
     compareTo.value=0;
     compareTo.ascending=true;
-    compareTo.origin=SHRT_MAX;
+    compareTo.origin=std::numeric_limits<short>::max();
     sortEnd=partition(cutp.begin(),sortEnd,bind2nd(greater<p_cutAndInfo>(),p_compareTo));
     sort(cutp.begin(),sortEnd,lessBW(*this));
     vector<p_cutAndInfo>::iterator sortBegin=cutp.begin();
@@ -775,6 +777,13 @@ public:
     h_over_2=(h*(h-1))/2;
     anzPunkte = 0;
   };
+  
+  
+  void adjust_H_wLen(int windowLength,int _h){
+	  wLen = windowLength;
+	  h = _h;
+	  h_over_2=(h*(h-1))/2;
+  }
   
   /** Remove the oldest point added that has not
     * yet been removed.

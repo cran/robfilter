@@ -27,8 +27,12 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
     xdat <- (del - n + 1):del
     we <- rep(1, width)
     if (weight == 1) {
-        we[1:(n - del)] <- 1:(n - del)
-        if (del>0){we[(n - del + 1):n] <- del:1}
+        if(del == 0){
+           we <- 1:n
+        } else {
+           we[1:(n-del)]   <- 1:(n-del)
+           we[(n-del+1):n] <- n-del-(1:del)
+        }     
     }
     if (weight == 2) {
     

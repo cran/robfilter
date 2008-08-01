@@ -145,6 +145,8 @@ private:
  */
 bool insertNext()
 {
+  //std::cout << "entering insertNext() \n";
+   //std::cout << "accesing responseVector" << std::endl;
    double w = responseVector[timeC];
    ++timeC;
      
@@ -160,6 +162,7 @@ bool insertNext()
       ++numNonNAs;
    }
   else {
+  	//std::cout << "leaving insertNext() --> NA inserted \n";
     return false;
   }
   
@@ -168,16 +171,21 @@ bool insertNext()
   //implicitly matching the sequence numbers/indexes used in R.
   
   if (usingHammock) {
-       H.addPunkt(timeC, w);
+	  //std::cout << "adding point to hammock" << std::endl;
+	  H.addPunkt(timeC, w);
   }
 	
   if (usingLQD) {
-       computeLQDAdvanced.addPunkt(timeC, w);
+	  //std::cout << "adding point to lqd" << std::endl;
+	  computeLQDAdvanced.addPunkt(timeC, w);
   }
   
   if (medianFilter) {
-    medianFilter->add(w);
+	  //std::cout << "adding point to median filter" << std::endl;
+	  medianFilter->add(w);
   }
+  
+  //std::cout << "leaving insertNext() --> value inserted \n";
   
   return true;
 }
@@ -188,6 +196,7 @@ bool insertNext()
  */ 
 void removeOldest()
 {    
+	//std::cout << "entering removeOldest() \n";
   if (usingHammock) {
        H.removePunkt();
   }
@@ -199,6 +208,7 @@ void removeOldest()
   if (medianFilter) {
     medianFilter->remove();
   }
+  //std::cout << "leaving removeOldest() \n";
 }
 
 void recordEstimate(vector<RegLine*>& results, int row) { 
@@ -238,7 +248,44 @@ void recordEstimate(vector<RegLine*>& results, int row) {
        results[medIndex][row] = RegLine(medianFilter->getMedian());
     }
 }
-       
+      
+
+void recordNAs(vector<RegLine*>& results, int row) { 
+    
+    
+    //We take care of shifting from estimating the intercept
+    //to estimating the level in the robustRegression method.
+    
+	
+	if (results[rmIndex]) {
+		H.updateRepeatedMedian();
+    }
+    
+    if (results[rmIndex]) {
+       results[rmIndex][row] = NA_REAL;
+    }
+    
+    if (results[drIndex]) {
+       results[drIndex][row] = NA_REAL;
+    }
+    
+    if (results[lmsIndex]) {
+       results[lmsIndex][row] = NA_REAL;
+    }
+    
+    if (results[ltsIndex]) {
+       results[ltsIndex][row] = NA_REAL;
+    }
+    
+    if (results[lqdIndex]) {
+       results[lqdIndex][row] = NA_REAL;
+    }
+    
+    if (medianFilter) {
+       results[medIndex][row] = NA_REAL;
+    }
+}
+
     public:
            
           
@@ -275,6 +322,8 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
                               bool extrapolation,
                               int minNumNonNAs)
     {                         
+   // std::cout << "Entering robustRegression Methode" << std::endl;
+    	        
      responseVector = response;
      fensterbreite = windowWidth;
      
@@ -282,9 +331,9 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
         error("width must be >= 3");
      }
      
-     if (windowWidth % 2 == 0 && centre) {
-        error("width must be odd when doing non-online estimation");
-     }
+     //if (windowWidth % 2 == 0 && centre) {
+     //  error("width must be odd when doing non-online estimation");
+    //}
      
      if (fensterbreite <= 0) {
             //XXX! When we call error, does the destructor get called?
@@ -309,9 +358,13 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
      }
      
      	// Initialisiere die verschiedenen Algorithmen
+  //   std::cout << "initialisiere die verschiedenen algorithmen" << std::endl;
+         
      	usingLQD = results[lqdIndex];
 	    if (usingLQD)
 	    {
+	    //	std::cout << "initialisiere lqd" << std::endl;
+	    	     
             const double epsilon = 0.01;
 	    	computeLQDAdvanced.init(fensterbreite, subsetsize, epsilon, searchExponent,
                            lqdDetermineStart, lqdApprox, lqdDescendMethod, DBL_EPSILON * 3);		    	
@@ -319,17 +372,20 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 	    usingHammock = results[rmIndex] || results[lmsIndex] || results[ltsIndex] || results[drIndex];
 	    if (usingHammock)
 	    {
-	      H.init(fensterbreite);
-	      H.setsubsetsize(subsetsize);
+	    	//std::cout << "initialisiere hammock" << std::endl;
+	    	H.init(fensterbreite);
+	    	H.adjust_H_wLen(fensterbreite,subsetsize);
 	    }
 	    
 	    if (results[medIndex]) {
-          medianFilter = new MedianFilter(fensterbreite);
+	    	medianFilter = new MedianFilter(fensterbreite);
         }
 	    
 	    nonNaTracker = new CircularArray<bool>(fensterbreite);
 	    
 	    //Insert fensterbreite values.
+	  //  std::cout << "ersten inserts bis fensterbreite erreicht" << std::endl;
+	    	    	
 	    for (int i = 0; i != fensterbreite; ++i) {
             insertNext();
         }
@@ -342,17 +398,31 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
             row = fensterbreite - 1;
         }
         
+//        std::cout << "erster record" << std::endl;
+        	    	
         if (numNonNAs >= minNumNonNAs) {
            recordEstimate(results, row);
+        } else {
+        	recordNAs(results,row);
         }
         ++row;
         
         //Process the remaining responseSize - fensterbreite values,
         //recording estimates for each.
+        
         const int remainder = responseSize - fensterbreite;
+        //std::cout << "begin der for schleife" << remainder << std::endl;
+                
         for (int j = 0; j != remainder; ++j, ++row) {
-            const bool oldestWasNotNA = nonNaTracker->oldest();
+//     		std::cout << "neuer schleifen durchlauf" << std::endl << "(j, nunNonNAs, fensterbreite)=(" << j << ", " << numNonNAs << ", " << fensterbreite << ")" << std::endl;
+        	        
+        	bool oldestWasNotNA = false;
+//        	std::cout << "vor if \n";
+        	if (nonNaTracker->size() != 0) {
+        		oldestWasNotNA = nonNaTracker->oldest();
+        	}
             const bool wasNotFull = numNonNAs != fensterbreite;
+            
             
             const bool insertedNA = !insertNext();
             
@@ -367,21 +437,35 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
             //This means that we must manually delete a non-NA value
             //when it is pushed off the end of a window containing NAs.
             if (oldestWasNotNA && (insertedNA || wasNotFull)) {
-               removeOldest();
+            	removeOldest();
             }
             
+            int newH = (subsetsize*(numNonNAs))/(fensterbreite);
+            if (usingHammock)
+            {
+            	//std::cout << "adjust hommock (windowsize,h)=(" << numNonNAs << ", " << newH << ")" << std::endl;
+            	H.adjust_H_wLen(numNonNAs,newH); // Aenderung der internen Variable Fensterbreite von Hammock duerfte keine auswirkungen auf den algorithmus haben 
+            }
+            if (usingLQD)
+            {
+            	computeLQDAdvanced.adjust_H_wLen(numNonNAs,newH);
+            }
+            // if the number of elements unequal to NA fall below minNumNonNAs
+            // an NA will be recorded instead of the current estimates.
             if (numNonNAs >= minNumNonNAs) {
                recordEstimate(results, row);
+            } else {
+            	recordNAs(results,row);
             }
         }
-     
+        
         if (extrapolation) {
             //Fill in elements for which an estimate has not been provided
             //using the nearest element that has.
             //
             //The first and last indexes with an estimate. Initialize them
             //to the values they would have for centre == false.
-            int first = fensterbreite - 1;
+            int first = fensterbreite - 1; 
             int last = responseSize - 1;
             if (centre) {
                first = fensterbreite / 2;
@@ -410,6 +494,7 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
     /**
      * Return an object containing estimates of slope and level for
      * each method named in the vector regressionMethods.
+     * centreExp ^= !online
      */
 	SEXP robustRegression(SEXP response, SEXP windowWidth, SEXP regressionMethods,
                                SEXP centreExp, SEXP h, SEXP extrapolation, SEXP minNumNonNAsExp)

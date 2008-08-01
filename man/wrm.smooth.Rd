@@ -16,7 +16,8 @@ wrm.smooth(x, y, h, xgrid, weight = 2)
 \arguments{
 \item{x}{Vector of predictors.}
 \item{y}{Vector of responses, needs to have the same length as \code{x}.}
-\item{h}{Bandwidth, needs to be positive.}
+\item{h}{Bandwidth, measured in the same units as the explanatory (independent) variable x: 
+(x[0]-\code{h},x[0]+\code{h}) is the range of x-values to be included in the local smoothing at x[0]. Needs to be a positive number.}
 \item{xgrid}{Grid on which fitted values are to be evaluated. The default is here to take the input
  values \code{x} for a sample size of at most 100, and \code{seq(min(x),max(x), l=100)} otherwise.}
 \item{weight}{Indicates the weight function used.

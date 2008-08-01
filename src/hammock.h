@@ -12,6 +12,7 @@
 #include <cstdio>
 #include "Edge.h"
 #include <iostream>
+#include <string>
 #include "Line.h"
 #include "RMquick.h"
 
@@ -76,11 +77,12 @@ template <class T> class Recycle
 {
   T **tab; // Zwischenspeicher für gelöschtes
   T *heap; // großer Speicherblock
-  int poolCount;   // nächste freie Stelle
-  int heapCount;
   int poolMax;
   int heapMax;
 public:
+	int poolCount;   // nächste freie Stelle
+	  int heapCount;
+	  
   Recycle(void)
   {
     heapCount=0;
@@ -116,6 +118,24 @@ public:
      }
   }
 
+  void freeUsedMemory(){
+	  for (int i = 0; i < heapCount; i++){
+		  heap[i].~T();
+	  }
+	  delete [] tab;
+	  tab=new T*[poolMax];
+	         
+	  //heap = new T[heapMax];
+	  //heap=new T[heapMax];
+	  /*for (int i = 0; i < poolCount; i++){
+		  delete tab[i];
+	  }*/
+	  
+	  heapCount = 0;
+	  poolCount = 0;
+  }
+  
+  
   void shred(T* o)
   {
     if (poolCount<poolMax)
@@ -151,7 +171,7 @@ public:
       }
       else
       {
-          Rprintf("recycle allocated something using new\n");
+         // Rprintf("recycle allocated something using new\n");
         p=new T;
         p->erasewithdelete=1;
         return p;
@@ -177,7 +197,12 @@ class Hammock:public RMbase
   Median med;
   int h; //Size of the covered area for lms, lts, ...
 
+  bool needReInit;
+  bool initDone;
 
+  void reInitHammock();
+  
+  
 public:
 
   Hammock(void)
@@ -245,6 +270,7 @@ public:
     R->setLine(border_R);
     R->set_X_pre(x,0);
     R->set_X_next(x,0);
+    needReInit = false;
   }
 
 
@@ -278,6 +304,8 @@ void checkLine(const int nr)
       a=a->getPre(d,&d);
   }
 }
+
+
 
 /*
 void printLines(void)
@@ -320,9 +348,10 @@ void printLine(const int nr)
 };
 */
 
-  void setsubsetsize(int size)
+  void adjust_H_wLen(int newWindowSize, int subsetSize)
   {
-    h=size;
+	  windowSize = windowSize;
+	  h=subsetSize;
   }
 
 private:
@@ -344,10 +373,11 @@ private:
 public:
   char * getName(void)
   {
-    return ("Hammock");
+    return ((char*) ("Hammock"));
   }
   
   RegLine getRM(double timeZero);
+  void updateRepeatedMedian();
   void computeLMS_old(void);
   void computeLXX(void);
 
@@ -745,8 +775,8 @@ public:
   long getMSec1(void) {	return 1; };
   long getMSec2(void) { return 1; };
 
-  char * print1(void) { return ""; };
-  char * print2(void) { return ""; };
+  char * print1(void) { return ((char*)""); };
+  char * print2(void) { return ((char*)""); };
 };//Stoppuhr; // todo: Fragen was hiermit gemeint ist
 
 

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-#pragma hdrstop
+//#pragma hdrstop
 
 #include "segment_tree.h"
 
@@ -207,4 +207,4 @@
 
 //---------------------------------------------------------------------------
 
-#pragma package(smart_init)
+//#pragma package(smart_init)
