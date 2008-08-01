@@ -157,7 +157,7 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
     }
 
     get.critval <- function(n, test.sample.size, critvals){
-        if(n <= 600) return(critvals[n, test.sample.size])  else
+        if(n <= 600) return(as.numeric(critvals[n, test.sample.size]))  else
         return(2 * qhyper(1 - 0.1/2, floor(n/2), floor(n/2), test.sample.size) - test.sample.size)
     }
 
@@ -188,7 +188,7 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
                     i=1
                     n.a <- n
                     repeat{
-                        if(n == min.width) break
+                        if(n.a == min.width) break
                         n.a <- n.a-i
                         x.win <- x[(n-n.a+1):n]
                         oRM.extr <- oRM(x.win)
@@ -406,10 +406,12 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         if(is.na(ov.width[t])){
             n <- min.width
         }
+        t=t+1
     }
+
     if(extraction.lag>0){
         signals <- rbind(matrix(NA,ncol=k,nrow=min.width-extraction.lag-1), signals[min.width:T,],
-            matrix(NA,ncol=k,nrow=min.width-extraction.lag))
+            matrix(NA,ncol=k,nrow=extraction.lag))
     }
     result <- list(signals=signals, widths=widths, overall.width=ov.width, Y=Y, byrow=byrow, min.width=min.width,
         max.width=max.width, start.width=start.width, test.sample.size=test.sample.size, width.search=width.search,
