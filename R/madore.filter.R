@@ -312,7 +312,7 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         kov    <- cov(cbind(x,dat)[di.qn <= dnqn,])
         beta   <- kov[1,2:(dim(dat)[2]+1)] / kov[1,1]
         alpha  <- apply(dat[di.qn <= dnqn,], 2, mean) - (beta * mean(x))
-        hat.y  <- alpha + beta*(length(x)-extraction.lag+1)
+        hat.y  <- alpha + beta*(length(x)-extraction.lag)
         return(hat.y)
     }
 
