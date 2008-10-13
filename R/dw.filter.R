@@ -442,10 +442,15 @@ print.dw.filter <- function(x, ...) {
     }
 
     # Define level and slope output
-    level.output <- rbind(rep("...",n.met),round(x$level[start+c(0:2),],6),rep("...",n.met))
-    rownames(level.output)[c(1,5)] <- c(" ","  ")
-    slope.output <- rbind(rep("...",n.met),round(x$slope[start+c(0:2),],6),rep("...",n.met))
-    rownames(slope.output)[c(1,5)] <- c(" ","  ")
+    if (n.met == 1){
+      level.output <- rbind(rep("...",n.met),matrix(round(x$level[start+c(0:2),],6), ncol=1),rep("...",n.met))
+      slope.output <- rbind(rep("...",n.met),matrix(round(x$slope[start+c(0:2),],6), ncol=1),rep("...",n.met))
+    } else {
+      level.output <- rbind(rep("...",n.met),round(x$level[start+c(0:2),],6),rep("...",n.met))
+      slope.output <- rbind(rep("...",n.met),round(x$slope[start+c(0:2),],6),rep("...",n.met))  
+    }
+    rownames(level.output) <- c(" ", start+c(0:2), "  ")
+    rownames(slope.output) <- c(" ", start+c(0:2), "  ")
     # Print level and slope output
     cat("$level \n")
     print(level.output)
