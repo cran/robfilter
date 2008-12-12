@@ -183,8 +183,15 @@ adore.filter <- function(y, p.test = 15, minNonNAs = 5,
             I.t <- (n - nI + 1):n
     
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Repeated Median estimation
-            if( sum(! is.na(y[I.t])) < ifelse( (nI < minNonNAs), nI, minNonNAs ) ){ # only if more than minNonNAs observations at recent nI times
+    # Repeated Median estimation for more than minNonNAs observations are present at recent nI times
+    # else: NAs are returned for level and slope and the window width is not enlarged
+            if( sum(! is.na(y[I.t])) < ifelse( (nI < minNonNAs), nI, minNonNAs ) ){
+                level.t <- NA
+                slope.t <- NA
+                nt      <- n
+                all.levels.t <- NA
+                all.slopes.t <- NA
+                all.widths.t <- NA
                 break
             }
     

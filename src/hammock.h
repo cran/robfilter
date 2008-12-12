@@ -37,9 +37,9 @@ public:
     akt=0;
     direction=0;
   }
-  
+
   ~ FaceIter() {}
-  
+
   Edge * start(Edge * anfang,int dir)
   {
      akt = anfang;
@@ -54,7 +54,7 @@ public:
   {
     direction=1-direction;
   }
-  
+
   Edge *current(void)
   {
     return akt;
@@ -82,7 +82,7 @@ template <class T> class Recycle
 public:
 	int poolCount;   // nächste freie Stelle
 	  int heapCount;
-	  
+
   Recycle(void)
   {
     heapCount=0;
@@ -92,7 +92,7 @@ public:
     tab=0;
     heap=0;
   }
-  
+
   ~Recycle(void)
   {
     delete[]tab;
@@ -124,18 +124,18 @@ public:
 	  }
 	  delete [] tab;
 	  tab=new T*[poolMax];
-	         
+
 	  //heap = new T[heapMax];
 	  //heap=new T[heapMax];
 	  /*for (int i = 0; i < poolCount; i++){
 		  delete tab[i];
 	  }*/
-	  
+
 	  heapCount = 0;
 	  poolCount = 0;
   }
-  
-  
+
+
   void shred(T* o)
   {
     if (poolCount<poolMax)
@@ -178,7 +178,7 @@ public:
       }
     }
   }
-  
+
 };
 
 class Hammock:public RMbase
@@ -190,7 +190,7 @@ class Hammock:public RMbase
   int anzLines;
   int windowSize;	// größes des Fensters das über die statistischen Daten geschoben wird
   double *medTab;
-  
+
   CircularArray<Line*>* lineTab;
   FaceIter iter;
   Recycle<Edge> bin;
@@ -201,9 +201,11 @@ class Hammock:public RMbase
   bool initDone;
 
   void reInitHammock();
-  
-  
+
+
 public:
+
+	bool debugInfo;
 
   Hammock(void)
   {
@@ -211,6 +213,7 @@ public:
     border_R=0;
     medTab=0;
     lineTab=0;
+    debugInfo = false;
   }
 
   virtual ~Hammock(void)
@@ -223,7 +226,7 @@ public:
       for(int i=0; i < anzLines; i++)
         delete lineTab->get(i);
     delete lineTab;
-  }		
+  }
 
   Edge *getFirstEdge(void)
   {
@@ -276,11 +279,17 @@ public:
 
 void checkLines(void)
 {
-  for(int i=0;i<anzLines;i++)
-    checkLine(i);
+  int memIntersectionCount = -1;
+  for(int i=0;i<anzLines;i++){
+  	int aktIntersectionCount = checkLine(i);
+  	if (memIntersectionCount !=-1 && aktIntersectionCount != 0 && memIntersectionCount != aktIntersectionCount){
+  		std::cout << "Somethings wrong here\n";
+  	}
+  	memIntersectionCount = aktIntersectionCount;
+  }
 }
 
-void checkLine(const int nr)
+int checkLine(const int nr)
 {
   //XXX! This method seems to have no visible output or effects.
   //Maybe we should revert to an earlier version and modify that
@@ -293,6 +302,7 @@ void checkLine(const int nr)
 
   int k=0;
 
+
   while(a!=0)
   {
     if (a->get_X_next(0)>-INF && a->get_X_next(0)<+INF)
@@ -303,6 +313,7 @@ void checkLine(const int nr)
     if (a!=0)
       a=a->getPre(d,&d);
   }
+  return k;
 }
 
 
@@ -366,7 +377,7 @@ private:
 
     return w;
   }
-  
+
   Edge *dissect_L(Line *neueLinie);
   void dissect_R(Edge *lose,Line *neueLinie);
   void delLine(void);
@@ -375,7 +386,7 @@ public:
   {
     return ((char*) ("Hammock"));
   }
-  
+
   RegLine getRM(double timeZero);
   void updateRepeatedMedian();
   void computeLMS_old(void);
@@ -385,15 +396,15 @@ public:
 
   // The slope m must be greater than that of all lines before.
   // The slope m must be greater equal Zero
-  void addPunkt(double m,double b);
-  
+  int addPunkt(double m,double b);
+
   /** Remove the oldest point added that has not
     * yet been removed. If there is no such point,
     * do nothing.
     */
   void removePunkt();
-  
-  void addLine(Line *neuL);
+
+  int addLine(Line *neuL);
   Edge *dissectEdge(Edge *lose,Edge *e,int e_dir);
   void print(void);
 
@@ -423,7 +434,7 @@ public:
     void keep_min(double x,double y1,double y2,Hammock *H)
     {
          //XXX! H is not used!
-         
+
 //      if (outD!=0) fprintf(outD,"    LMS: %f %f %f %f",fabs(y1-y2),x,y1,y2);
        if (fabs(y1-y2)<min)
        {

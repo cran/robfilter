@@ -167,7 +167,7 @@ class RMbase
   public:
   virtual ~RMbase() {};
   virtual char * getName(void)=0;
-  virtual void addPunkt(double x,double y)=0;
+  virtual int addPunkt(double x,double y)=0;
   virtual RegLine getRM(double timeZero)=0;
   virtual RegLine getLMS(double timeZero){return(0);};
   virtual void print(void){};
@@ -220,7 +220,7 @@ public:
   {
     return ((char*)("RMquick"));
   };
-  void addPunkt(double x,double y)
+  int addPunkt(double x,double y)
   {
     tab[index].x=x;
     tab[index].y=y;
@@ -230,6 +230,7 @@ public:
     index++;
     if (index==windowSize)
       index=0;
+    return 0;
   };
   RegLine getRM(double timeZero)
   {

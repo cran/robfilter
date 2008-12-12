@@ -6,15 +6,16 @@
 #include <iostream>
 #include <R_ext/Arith.h> // for ISNA and NA_REALs
 
+
   RegLine Hammock::getRM(double timeZero)
   {
-    /* The Repeated Median Algorithmn needs at least 4 lines to run correctly 
-     * if the number of lines fall below 4 the hammock must be reInitiated to 
-     * work with the getRM function. This is done by calling reInitHammock once 
-     * the number of lines increases 4 again. 
+    /* The Repeated Median Algorithmn needs at least 4 lines to run correctly
+     * if the number of lines fall below 4 the hammock must be reInitiated to
+     * work with the getRM function. This is done by calling reInitHammock once
+     * the number of lines increases 4 again.
      * The reInitHammock function first memorizes all lines in the Hammock (note not more than 3)
-     * than an reInit is Done by deleting the hammock 
-     * at last the Hammock is reInit and the lines are added to it too. 
+     * than an reInit is Done by deleting the hammock
+     * at last the Hammock is reInit and the lines are added to it too.
      * */
 	//std::cout << "start getRM anzLines:" << anzLines << "\n";
 	if (anzLines < 5){
@@ -28,7 +29,7 @@
     	}
     	initDone = false;
     }
-    
+
     for (int i=0; i<anzLines; i++) {
       Line* l = lineTab->get(i);
       l->updateMedian();
@@ -36,23 +37,23 @@
     }
 
     double *tab2 = new double[anzLines];
-    
-    
+
+
     const double steigung = med.getMedian(medTab, anzLines);
 
     for (int i =0; i < anzLines; i++)
     {
-      Line *g = lineTab->get(i);			
+      Line *g = lineTab->get(i);
       tab2[i] = g->b - steigung * g->m;
     }
 
     //Auf Level umrechnen
     const double y_achse = med.getMedian(tab2, anzLines);
-    
+
     delete[] tab2;
-        	
+
     return RegLine(y_achse, steigung);
-  
+
   }
 void Hammock::updateRepeatedMedian()
 {
@@ -68,9 +69,9 @@ void Hammock::updateRepeatedMedian()
     	}
     	initDone = false;
     }
-	
-		
-   
+
+
+
     for (int i=0; i<anzLines; i++) {
       	Line* l = lineTab->get(i);
   		l->updateMedian();
@@ -78,15 +79,15 @@ void Hammock::updateRepeatedMedian()
 }
 
 void Hammock::reInitHammock(){
-	 
-	
+
+
 	int n = lineTab->size();
 	Line ** mem = new Line*[n];
 	for (int i = 0; i < n; i++){
 		mem[i] = lineTab->get(0);
 		lineTab->removeOldest();
 	}
-	
+
 	 bin.freeUsedMemory();
 	 L=bin.neu(); //new Edge();
 	 R=bin.neu(); //new Edge();
@@ -102,7 +103,7 @@ void Hammock::reInitHammock(){
 	 R->setLine(border_R);
 	 R->set_X_pre(x,0);
 	 R->set_X_next(x,0);
-	 
+
 	 needReInit = false;
 	 initDone = true;
 	 anzLines = 0;
@@ -111,16 +112,17 @@ void Hammock::reInitHammock(){
 	 	mem[i]->resetLine();
 		addLine(mem[i]);
 	 }
-	 
+
 }
 
 Edge *Hammock::dissect_L(Line *neueLinie)
 {
   Edge* altL=L;
   Edge* neuL=bin.neu();
-  L=neuL;
-  Edge* out=bin.neu();
-  Edge* lose = bin.neu();
+  L=neuL; // neue untere Kante der linken Begrenzung
+  Edge* out=bin.neu();  // neue Kante die auf der linken Seite der linken Begrezung rausguckt
+  Edge* lose = bin.neu(); // neue Kante die auf der rechten Seite der linken Begrenzung rausguckt und fuer
+  // die in den naechsten Schritten der Test mit den vorhandenen Kanten durchgefuehrt werden muss
 
   neueLinie->startE = out;
 
@@ -241,10 +243,10 @@ void Hammock::computeLXX(void)
   Edge *o2,*u2;
   int lowP_o=0,lowP_u=0;
 
-  double ow,uw,w; 
+  double ow,uw,w;
   w = 0; /*initialize*/
   Line *l1,*l2;
-  
+
   //XXX! Is it right to do nothing here when k > anz?
   const int anz=getAnzLines();
   const int k=h-1;
@@ -385,14 +387,14 @@ void Hammock::testMedian(){
  	double median_test = m.lineTab[0]->getMedian(anz_Linien);
  	double gesamt_median_test = m.getRM(0)->steigung;
  	std::cout << "Median ist " << median_test << std::endl;
- 	std::cout << "Median gesamt ist " << gesamt_median_test << std::endl;  
+ 	std::cout << "Median gesamt ist " << gesamt_median_test << std::endl;
 }*/
 
 // Die einzufügende Linie muss eine größere Steigung haben als alle vorhandenen
-void Hammock::addPunkt(double m,double b)
+int Hammock::addPunkt(double m,double b)
 {
   // Neue Linie erzeugen
-  addLine(new Line(m,b,this));
+  return addLine(new Line(m,b,this));
 }
 
 /** Remove the oldest point added that has not
@@ -404,85 +406,105 @@ void Hammock::removePunkt()
      if (anzLines < 1) {
         return;
      }
-     
+
      delLine();
 }
 
-void Hammock::addLine(Line *neuL)
+int Hammock::addLine(Line *neuL)
 {
-  //std::cout<< "addLine: " << anzLines << ", " << windowSize << std::endl;
-  
   neuL->root = this;
-  
+
+
   if (anzLines >= windowSize){
 	  delLine();
   }
-
-  anzLines++;
+	anzLines++;
 
   lineTab->append(neuL);
-    
+
   // In linke Begrenzung einfügen
   Edge *lose = dissect_L(neuL);
 
   // Flags löschen
 
   L->getLine()->mark=1;
+
   for (int i = 0; i<anzLines; i++)
   {
-   lineTab->get(i)->mark = 0;
+   	lineTab->get(i)->mark = 0;
   }
 
   iter.start(lose, 1);
   int test_dir;
   Edge *test = iter.next(&test_dir);
 
-  //XXX! Does it indicate an error to come across test == 0 or test->getLine() == 0?
-  while(test != 0 && test->getLine() != 0 && ! test->getLine()->isRight()) //bis bei R angekommen
-    {
-      // calculate intersection
-      const double u = neuL->schnittX(test->getLine());
 
-      // Is the edge "test" intersected by the new line
-      if (u >= test->get_X_pre(0) && u <= test->get_X_next(0))
+
+  double last_u = 0;
+  bool init = true;
+
+  while(test != 0 && test->getLine() != 0 && !test->getLine()->isRight()) //bis bei R angekommen
+  {
+  	  // calculate intersection
+      const double u = neuL->schnittX(test->getLine());
+	  // Is the edge "test" intersected by the new line
+	  bool leq;
+	  bool geq;
+
+      double u1 = test->get_X_pre(0);
+      double u2 = test->get_X_next(0);
+
+
+      leq = (test->get_X_pre(0) < u) || (u1-u==0);
+      geq = (u < test->get_X_next(0)) || (u2-u==0);
+
+      //
+
+      /*if (debugInfo){
+      	//printf("\npre %1.20f, u %1.20f\n",test->get_X_pre(0),u);
+      	//printf("u %1.20f, next %1.20f\n",u,test->get_X_next(0));
+      	//printf("leq %i , geq %i\n",leq,geq);
+
+      }*/
+      if (leq  && geq)
       {
+        if (last_u > u && !(last_u-u==0) && !init) {
+        	return -1; // Error in calculation. Please use an other algorithmn
+        }
+        init = false;
+        last_u = u;
         lose = dissectEdge(lose, test, test_dir);
         iter.invertDirection();
       }
-      test = iter.next(&test_dir);
-    }
-  dissect_R(lose,neuL);
 
-/*
-  for (int i=0; i<anzLines; i++)
-  {
-    Line* l = lineTab->get(i);
-    l->updateMedian();
-    if (anzLines >= 3)
-      medTab[i] = l->getMedian(anzLines);
+      test = iter.next(&test_dir);
   }
-  */
+
+  //std::cout << "after:\n";
+  //checkLines();
+
+  dissect_R(lose,neuL);
+  return 0;
 }
 
 void Hammock::delLine(void)
 {
-     
+
   // Flags löschen
-  //std::cout<< "delLine" << std::endl;
-  L->getLine()->mark=0;
+    L->getLine()->mark=0;
   //std::cout<< "get Last Line done" << std::endl;
-  
+
   for (int i=0; i<anzLines; i++) {
-	     
+
     lineTab->get(i)->mark=0;
-    	
+
   }
 
-  
+
   int dir;
   Edge *pre = Lup->getNext(0,&dir);
   Line *delL = pre->getLine(); // #### absturz stelle
-    
+
   anzLines--;
   delL->setMedian(0); //XXX! Is this necessary?
 
@@ -531,15 +553,17 @@ void Hammock::delLine(void)
 
      pre=next;
   }
-    
+
   lineTab->removeOldest();
-  
+
   delete delL;
-  
-  
+
+
   if (anzLines == 0){
 	 reInitHammock();
   }
+
+
 }
 
 
@@ -548,7 +572,7 @@ void Hammock::delLine(void)
   {
   //XXX! Copying the contents of lineTab might save us some time here by avoiding
   //index checks/dealing with indexes wrapping around the end of the array.
-       
+
     regDepth.clear();
 
     border_L->nr=-1;
@@ -563,7 +587,7 @@ void Hammock::delLine(void)
     const int twiceAnzLines = 2 * anzLines;
 
     SegmentTree t(twiceAnzLines);
-    
+
     for(int i=0; i < twiceAnzLines; i++)
       t.extend(0);
     for(int k=0;k<anzLines;k++)

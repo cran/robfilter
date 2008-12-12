@@ -119,8 +119,11 @@ robreg.filter <- function(y,                    # input time series data (numeri
 
   # function call
   as.i <- as.integer
-  r <- .Call("robustRegression", y, as.i(width), method.names, !online, as.i(h), as.logical(extrapolate), as.i(minNonNAs), NAOK=TRUE)
-
+  rr <- .Call("robustRegression", y, as.i(width), method.names, !online, as.i(h), as.logical(extrapolate), as.i(minNonNAs), NAOK=TRUE)
+  if (rr[[1]] == -1){
+  	print("An error occured during calculation. The resulting data could be inconsistent");
+  }
+  r <- rr[[2]];
   # output results
   level <- matrix(ncol=n.met, nrow=N, dimnames=list(1:N, all.methods[which(all.methods %in% method.names)]))
   slope <- matrix(ncol=n.met, nrow=N, dimnames=list(1:N, all.methods[which(all.methods %in% method.names)]))
