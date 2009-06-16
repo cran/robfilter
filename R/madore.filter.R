@@ -1,7 +1,7 @@
 madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200, 
                              start.width=min.width, test.sample.size=min.width/2,
                              width.search="geometric", 
-                             rtr.size=10, extraction.lag=0, 
+                             rtr.size=10, extr.delay=0, 
                              NA.sample.size=10, minNonNAs=5){
 
 ################
@@ -11,7 +11,7 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
     max.width <- round(max.width)
     test.sample.size <- round(test.sample.size)
     rtr.size <- round(rtr.size)
-    extraction.lag <- round(extraction.lag)
+    extr.delay <- round(extr.delay)
     NA.sample.size <- round(NA.sample.size)
     minNonNAs <- round(minNonNAs)
 
@@ -81,17 +81,17 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         warning("'rtr.size' is greater than 'min.width'. If 'rtr.size' is greater than n(t),
         where n(t) is the currently used window width, 'rtr.size' is set to n(t).\n")
 
-    if(!is.numeric(extraction.lag))
-        stop("'extraction.lag' must be numeric.\n")
+    if(!is.numeric(extr.delay))
+        stop("'extr.delay' must be numeric.\n")
 
-    if(extraction.lag < 0){
-        extraction.lag <- 0
-        warning("'extraction.lag' must be at least 0; 'extraction.lag' is set to 0.\n")
+    if(extr.delay < 0){
+        extr.delay <- 0
+        warning("'extr.delay' must be at least 0; 'extr.delay' is set to 0.\n")
     }
 
-    if(extraction.lag > min.width/2){
-        extraction.lag <- min.width/2
-        warning("'extraction.lag' must not be greater than 'min.width'/2; 'extraction.lag' is set to 'min.width'/2.\n")
+    if(extr.delay > min.width/2){
+        extr.delay <- min.width/2
+        warning("'extr.delay' must not be greater than 'min.width'/2; 'extr.delay' is set to 'min.width'/2.\n")
     }
 
     if(!is.numeric(NA.sample.size))
@@ -144,8 +144,8 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         if(length(f) > 0){
             y[f] <- y.hat[f]
         }
-        if(extraction.lag>0){
-            mu.oRM <- y.hat[n-extraction.lag+1]
+        if(extr.delay>0){
+            mu.oRM <- y.hat[n-extr.delay+1]
         }
         res <- y - y.hat
         list(mu.oRM=mu.oRM, y.hat=y.hat, res=res)
@@ -312,7 +312,7 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         kov    <- cov(cbind(x,dat)[di.qn <= dnqn,])
         beta   <- kov[1,2:(dim(dat)[2]+1)] / kov[1,1]
         alpha  <- apply(dat[di.qn <= dnqn,], 2, mean) - (beta * mean(x))
-        hat.y  <- alpha + beta*(length(x)-extraction.lag)
+        hat.y  <- alpha + beta*(length(x)-extr.delay)
         return(hat.y)
     }
 
@@ -409,13 +409,13 @@ madore.filter <- function(Y, byrow=FALSE, min.width=20, max.width=200,
         t=t+1
     }
 
-    if(extraction.lag>0){
-        signals <- rbind(matrix(NA,ncol=k,nrow=min.width-extraction.lag-1), signals[min.width:T,],
-            matrix(NA,ncol=k,nrow=extraction.lag))
+    if(extr.delay>0){
+        signals <- rbind(matrix(NA,ncol=k,nrow=min.width-extr.delay-1), signals[min.width:T,],
+            matrix(NA,ncol=k,nrow=extr.delay))
     }
     result <- list(signals=signals, widths=widths, overall.width=ov.width, Y=Y, byrow=byrow, min.width=min.width,
         max.width=max.width, start.width=start.width, test.sample.size=test.sample.size, width.search=width.search,
-        rtr.size=rtr.size, extraction.lag=extraction.lag, NA.sample.size=NA.sample.size, minNonNAs=minNonNAs)
+        rtr.size=rtr.size, extr.delay=extr.delay, NA.sample.size=NA.sample.size, minNonNAs=minNonNAs)
     return(structure(result, class="madore.filter"))
 }
 
