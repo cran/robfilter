@@ -9,7 +9,7 @@ int MEDIAN_LINKS(int anz)
   //XXX! For anz >= 0, this is always equal to anz/2
   //(using integer math). And anz is always >= 0.
     
-  int m=(int)ceil((anz+1.0)/2.0)-1;
+  int m=(int) ceil((anz+1.0)/2.0)-1;
   if (m<0)
     m=0;
   

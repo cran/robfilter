@@ -22,6 +22,7 @@ typedef uint64_t u__int64;
 #include <math.h>
 
 #include <R_ext/Print.h> // for Rprintf
+#include <time.h> // for time
 
 using namespace std; 
 

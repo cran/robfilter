@@ -246,7 +246,12 @@ public:
     //XXX! Using integer math, it's always the case
     //that ceil(windowSize/2) == windowSize/2 == floor(windowSize/2).
     //Is this what is intended? Or should we instead divide by 2.0?
-    h=ceil(windowSize/2)+1;
+    
+    // Line "h=ceil(windowSize/2)+1;" results in the error
+    // > Overloading ambiguity between "ceil(double)" and "std::ceil(float)
+    // on Solaris / SunStudio. 
+    h=std::ceil(windowSize/2)+1;
+    
     //h=(int)ceil(windowSize/2)+1;
     medTab = new double[windowSize];
     lineTab = new CircularArray<Line*>(windowSize);
