@@ -26,7 +26,7 @@ double Line::getMedian(int anzLines)
      * */ 
     if (anzLines & 1) {
 		const double left = median_->get_X_pre(0);
-		return isfinite(left) ? (left + right) / 2.0 : right; 
+		return R_FINITE(left) ? (left + right) / 2.0 : right; 
 	}
     else
       return right; // ansonsten wird einfach der Median genommen

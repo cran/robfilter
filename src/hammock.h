@@ -250,7 +250,7 @@ public:
     // Line "h=ceil(windowSize/2)+1;" results in the error
     // > Overloading ambiguity between "ceil(double)" and "std::ceil(float)
     // on Solaris / SunStudio. 
-    h=std::ceil(windowSize/2)+1;
+    h=std::ceil(windowSize/2.0)+1;
     
     //h=(int)ceil(windowSize/2)+1;
     medTab = new double[windowSize];
