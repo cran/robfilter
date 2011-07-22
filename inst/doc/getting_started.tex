@@ -41,6 +41,8 @@ This package contains the following functions: \vspace*{0.25cm} \\
                        & (online)\\
 \texttt{madore.filter} & multivariate repeated median-least squares filter with adaptive\\
 											 & choice of the window width (online)\\
+\texttt{scarm.filter}  & repeated median filter with adaptive choice of the window width\\
+                       & (online)\\
 \texttt{wrm.filter}    & weighted repeated median filters (delayed and online)\\
 \texttt{wrm.smooth}    & weighted repeated median smoother (delayed and online)
 \end{tabular} \vspace*{0.25cm}
@@ -130,12 +132,19 @@ explanations on shift detection, see Fried and Gather (2007).
 %===================================================================
 \subsection{\texttt{adore.filter}}
 
-The \texttt{adore.filter} overcomes the problem of window width choice and the accompanying bias variance trade-off for the signal level estimations by choosing the window width adaptively, depending on the current data situation. The filter produces online signal estimates (and if wanted also an accompanying robust online scale estimates) which do not require any prior parameter specification. Therefore, it provides a simple alternative to online filters applying rules for shift or change detection but require the specification of certain settings. For more details see Schettlinger, Fried and Gather (2008).
+The \texttt{adore.filter} overcomes the problem of the window width choice and the accompanying bias variance trade-off for the signal level estimations by choosing the window width adaptively, depending on the current data situation. 
+Therefore, it provides an alternative to online filters applying rules for shift or change detection. The window width adaption is predicated on a test which is based on the signs of the residuals of a Repeated Median regression. The filter produces online signal estimates, and if wanted also accompanying robust online scale estimates. For more details see Schettlinger, Fried and Gather (2010).
 
 %===================================================================
 \subsection{\texttt{madore.filter}}
 
-The \texttt{madore.filter} is an adaptive online filter for multivariate time series, based on repeated median and multivariate least squares regression. The test procedure of the \texttt{adore.filter} (see above) is used to adapt the window width at each time point, depending on the current data situation. The signal is estimated within the adapted time window by a slight modification of the multivariate \textit{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). In contrast to the \texttt{adore.filter}, the \texttt{madore.filter} takes account of the local correlations between the components of the multivariate time series. A more detailed description of the filter can be found in Borowski, Schettlinger, Gather (2008).
+The \texttt{madore.filter} is an adaptive online filter for multivariate time series, based on repeated median and multivariate least squares regression. The test procedure of the \texttt{adore.filter} (see above) is used to adapt the window width at each time point, depending on the current data situation. The signal is estimated within the adapted time window by a slight modification of the multivariate \textit{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). In contrast to the \texttt{adore.filter}, the \texttt{madore.filter} takes account of the local correlations between the components of the multivariate time series. A more detailed description of the filter can be found in Borowski, Schettlinger, Gather (2009).
+
+%===================================================================
+\subsection{\texttt{scarm.filter}}
+
+The \texttt{scarm.filter} overcomes the problem of the window width choice and the accompanying bias variance trade-off for the signal level estimations by choosing the window width adaptively, depending on the current data situation. Therefore, it provides an alternative to online filters applying rules for shift or change detection. The window width adaption is predicated on a test which is based on the difference of Repeated Median slopes computed in separated time windows. The filter produces online signal estimates, and if wanted also accompanying robust online scale estimates. For more details see Borowski and Fried (2011).
+
 %===================================================================
 \subsection{\texttt{wrm.filter}}
 
@@ -175,13 +184,13 @@ methods is given in Schettlinger, Fried and Gather (2006).
 %In case of questions, remarks, suggestions, please contact
 
 Matthias Borowski\\
-Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+Department of Statistics, TU Dortmund University, 44221 Dortmund, Germany\\
 E-Mail: \texttt{borowski@statistik.tu-dortmund.de}\vspace*{0.5cm}\\
 Roland Fried\\
-Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+Department of Statistics, TU Dortmund University, 44221 Dortmund, Germany\\
 E-Mail: \texttt{fried@statistik.tu-dortmund.de}\vspace*{0.5cm}\\
 Karen Schettlinger\\
-Department of Statistics, Dortmund University of Technology, 44221 Dortmund, Germany\\
+Department of Statistics, TU Dortmund University, 44221 Dortmund, Germany\\
 E-Mail: \texttt{schettlinger@statistik.tu-dortmund.de}
 
 %===================================================================
@@ -190,16 +199,16 @@ E-Mail: \texttt{schettlinger@statistik.tu-dortmund.de}
 \renewcommand{\labelitemi}{ }
 \begin{itemize}
 \item
-Bernholt, T., Fried, R. (2003) Computing the Update of the Repeated
+Bernholt, T., Fried, R. (2003). Computing the Update of the Repeated
 Median Regression Line in Linear Time, \emph{Information Processing
 Letters} \textbf{88}(3), 111-117.
 
 \item
-Bernholt, T., Fried, R., Gather, U., Wegener, I. (2006) Modified
+Bernholt, T., Fried, R., Gather, U., Wegener, I. (2006). Modified
 Repeated Median Filters, \emph{Statistics and Computing} \textbf{16}, 177-192.
 
 \item
-Bernholt, T., Nunkesser, R., Schettlinger, K. (2007) Computing
+Bernholt, T., Nunkesser, R., Schettlinger, K. (2007). Computing
 the Least Quartile Difference Estimator in the Plane,
 \emph{Computational Statistics and Data Analysis, Special Issue on
 Statistical Algorithms and Software}, to appear.\\
@@ -207,90 +216,92 @@ Statistical Algorithms and Software}, to appear.\\
 Technical Report 51/2005, SFB 475, Universit\"{a}t Dortmund)
 
 \item
-Borowski, M., Schettlinger, K., Gather, U. (2008) Multivariate Real Time
-Signal Estraction by a Robust Adaptive Regression Filter, submitted.
+Borowski, M., Fried, R. (2011).
+Robust moving window regression for online signal extraction from non-stationary time series: online window width adaption by testing for signal changes, submitted.
+
+\item
+Borowski, M., Schettlinger, K., Gather, U. (2009). Multivariate real time signal processing by a robust adaptive regression filter. \emph{Communications in Statistics -- Simulation and Computation}, \textbf{38}(2), 426-440.
 
 \item
 Croux, C. and Rousseeuw, P.J., H\"{o}ssjer, O.
-(1994) Generalized S-Estimators, \emph{Journal of the American Statistical
+(1994). Generalized S-Estimators, \emph{Journal of the American Statistical
 Association}
 \textbf{89}, 1271-1281.
 
 \item
-Davies, P.L., Fried, R., Gather, U. (2004) Robust Signal Extraction
+Davies, P.L., Fried, R., Gather, U. (2004). Robust Signal Extraction
 for On-line Monitoring Data, \emph{Journal of Statistical Planning
 and Inference} \textbf{122}, 65-78.
 
 \item
-Fried R. (2004) Robust Filtering of Time Series with Trends, \emph{Journal
+Fried R. (2004). Robust Filtering of Time Series with Trends, \emph{Journal
 of Nonparametric Statistics} \textbf{16}(3), 313-328.
 
 \item
-Fried, R., Bernholt, T., Gather, U. (2006) Repeated Median and
+Fried, R., Bernholt, T., Gather, U. (2006). Repeated Median and
 Hybrid Filters, \emph{Computational Statistics and Data Analysis} \textbf{50},
 Special Issue on 'Statistical Signal Extraction and Filtering',
 2313-2338.
 
 \item
-Fried, R., Einbeck, J., Gather, U. (2007) Weighted Repeated Median
+Fried, R., Einbeck, J., Gather, U. (2007). Weighted Repeated Median
 Smoothing and Filtering, \emph{Journal of the American Statistical
 Association}, to appear.\\
 (earlier version:
 Technical Report 33/2005, SFB 475, Universit\"{a}t Dortmund)
 
 \item
-Fried, R., Gather, U. (2002) Fast and Robust Filtering of Time Series
+Fried, R., Gather, U. (2002). Fast and Robust Filtering of Time Series
 with Trends, in: W. H\"{a}rdle and B. R\"{o}nz (eds.),
 \emph{Proceedings in Computational Statistics}, Physica, Heidelberg, 367-372.
 
 \item
-Fried, R., Gather, U. (2007), On Rank Tests for Shift
+Fried, R., Gather, U. (2007). On Rank Tests for Shift
 Detection in Time Series, \emph{Computational Statistics and Data
 Analysis, Special Issue on Machine Learning and Robust Data
 Mining} \textbf{52}, 221-233.
 
-\item Gather, U., Fried, R. (2004) Methods and Algorithms for Robust
+\item Gather, U., Fried, R. (2004). Methods and Algorithms for Robust
 Filtering, in: J. Antoch (ed.), \emph{Proceedings in Computational
 Statistics}, Physica, Heidelberg,  159-170.
 
-\item Gather, U., Schettlinger, K., Fried, R. (2006) Online Signal
+\item Gather, U., Schettlinger, K., Fried, R. (2006). Online Signal
 Extraction by Robust Linear Regression, \emph{Computational
 Statistics}, \textbf{21}(1), 33-51.
 
 \item
-Hampel, F.R. (1975) Beyond Location Parameters: Robust Concepts
+Hampel, F.R. (1975). Beyond Location Parameters: Robust Concepts
 and Methods, \emph{Bulletin of the International Statistical
 Institute} \textbf{46}, 375-382.
 
 \item
-Lanius, V., Gather, U. (2007) Robust Online Signal Extraction from
+Lanius, V., Gather, U. (2007). Robust Online Signal Extraction from
 Multivariate Time Series, \emph{Technical Report 38/2007, SFB 475,
 Technische Universit\"{a}t Dortmund.}
 
 \item
-Rousseeuw, P.J.(1983) Multivariate Estimation with High Breakdown
+Rousseeuw, P.J.(1983). Multivariate Estimation with High Breakdown
 Point, \emph{Proceedings of the 4th Pannonian Symposium on Mathematical
 Statistics and Probability} \textbf{B}, Dordrecht, Reidel.
 
-\item Rousseeuw, P.J. (1984) Least Median of Squares Regression,
+\item Rousseeuw, P.J. (1984). Least Median of Squares Regression,
 \emph{Journal of the American Statistical Association} \textbf{79}, 871-880.
 
 \item
-Rousseeuw, P.J., Hubert, M. (1999) Regression Depth, \emph{Journal of the
+Rousseeuw, P.J., Hubert, M. (1999). Regression Depth, \emph{Journal of the
 American Statistical Association} \textbf{94}, 388-402.
 
 \item
-Schettlinger, K., Fried, R., Gather, U. (2006), Robust Filters
+Schettlinger, K., Fried, R., Gather, U. (2006). Robust Filters
 for Intensive Care Monitoring - Beyond the Running Median,
 \emph{Biomedizinische Technik} \textbf{51}(2), 49-56.
 
 \item
-Schettlinger, K., Fried, R., Gather, U. (2008),
-Real Time Signal Processing by Adaptive Repeated Median Filters,
-\emph{International Journal of Adaptive Control and Signal Processing}, submitted.
+Schettlinger, K., Fried, R., Gather, U. (2010). Real time signal processing by adaptive
+repeated median filters. \emph{International Journal of Adaptive Control and Signal Processing} \textbf{24}, 346-362.
 
 \item
-Siegel, A.F. (1982) Robust Regression Using Repeated
+Siegel, A.F. (1982). Robust Regression Using Repeated
 Medians, \emph{Biometrika} \textbf{69}, 242-244.
 \end{itemize}
 %===================================================================

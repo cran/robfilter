@@ -1,11 +1,5 @@
 \name{robreg.filter} 
 \alias{robreg.filter} 
-\alias{lts.filter} 
-\alias{rm.filter} 
-\alias{lms.filter} 
-\alias{dr.filter} 
-\alias{lqd.filter} 
-\alias{med.filter} 
 
 \title{Robust Regression Filters for Univariate Time Series} 
 
@@ -19,15 +13,15 @@ windows.
 robreg.filter(y, width, method = "all", h = floor(width/2)+1,   
                  minNonNAs = 5, online = FALSE, extrapolate = TRUE)
 
-lts.filter(y, width, h = floor(width/2)+1, 
-              online = FALSE, extrapolate = TRUE)
-              
-med.filter(y, width, minNonNAs = 5, online = FALSE, extrapolate = TRUE)
-rm.filter (y, width, minNonNAs = 5, online = FALSE, extrapolate = TRUE)
-
-dr.filter (y, width, online = FALSE, extrapolate = TRUE)
-lms.filter(y, width, online = FALSE, extrapolate = TRUE)
-lqd.filter(y, width, online = FALSE, extrapolate = TRUE)
+%lts.filter(y, width, h = floor(width/2)+1, 
+%              online = FALSE, extrapolate = TRUE)
+%              
+%med.filter(y, width, minNonNAs = 5, online = FALSE, extrapolate = TRUE)
+%rm.filter (y, width, minNonNAs = 5, online = FALSE, extrapolate = TRUE)
+%
+%dr.filter (y, width, online = FALSE, extrapolate = TRUE)
+%lms.filter(y, width, online = FALSE, extrapolate = TRUE)
+%lqd.filter(y, width, online = FALSE, extrapolate = TRUE)
 }
 
 \arguments{ 
@@ -130,8 +124,6 @@ on contains less than \code{minNonNAs} non-missing values.
 
 \seealso{\code{\link{wrm.filter}}, \code{\link{robust.filter}}, \code{\link{dw.filter}}, \code{\link{hybrid.filter}}.}
 
-
-
 \examples{
 # Generate random time series:
 y <- cumsum(runif(500)) - .5*(1:500)
@@ -155,7 +147,6 @@ plot(y2.rr)
 y3.rr <- rm.filter(y,width=41,online=TRUE)
 plot(y3.rr)
 }
-
 
 \keyword{robust}
 \keyword{smooth}
