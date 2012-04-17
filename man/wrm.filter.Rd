@@ -11,18 +11,18 @@ One of several weight functions can be chosen to weight the observations in each
         }
 
 \usage{
-wrm.filter(y, width, weight = 1, del = floor(width/2), extrapolate = TRUE)
+wrm.filter(y, width, weight.type = 1, del = floor(width/2), extrapolate = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{y}{a numeric vector or (univariate) time series object. }
 \item{width}{a positive integer defining the window width used for fitting. \cr
             If \code{del = floor(width/2)} (default) this needs to be an odd number.}
-\item{weight}{Indicates the weight function used.
+\item{weight.type}{Indicates the weight function used.
 \describe{
-\item{\code{weight=0}:}{equal weighting}
-\item{\code{weight=1}:}{triangular weights (default)}
-\item{\code{weight=2}:}{Epanechnikov weights}
+\item{\code{weight.type=0}:}{equal weighting}
+\item{\code{weight.type=1}:}{triangular weights (default)}
+\item{\code{weight.type=2}:}{Epanechnikov weights}
 }}
 \item{del}{ a positve integer (smaller than width) specifying the delay of the signal extraction. \cr
  \code{del=0} means online signal extraction without delay. \cr
@@ -62,7 +62,7 @@ following components:
 \item{slope}{the corresponding slope within each time window.}
 \item{del}{the parameter specifying the delay of the signal extraction.}
 \item{width}{width of the time window.}
-\item{weight}{name of the weight function used for the fit.}
+\item{weight.type}{name of the weight function used for the fit.}
 The function \code{plot} returns a plot 
 showing the original time series with the filtered output. } 
 

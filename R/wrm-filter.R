@@ -1,5 +1,5 @@
 ##################################################################################################
-wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = TRUE) {
+wrm.filter <- function (y, width, weight.type = 1, del = floor(width/2), extrapolate = TRUE) {
     if (is.numeric(y) == FALSE)
         stop("y must be numeric")
     len <- length(y)
@@ -15,7 +15,7 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
 
     if( width==0 ) { stop("invalid specification of 'width': value must be positive") } 
     
-    if (weight!=0 & weight!=1 & weight!=2) { stop("invalid specification of 'weigth': possible values are 0, 1, 2 ") } 
+    if (weight.type!=0 & weight.type!=1 & weight.type!=2) { stop("invalid specification of 'weigth': possible values are 0, 1, 2 ") } 
 
 
     ## save the name of the input time series
@@ -26,7 +26,7 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
     n <- width
     xdat <- (del - n + 1):del
     we <- rep(1, width)
-    if (weight == 1) {
+    if (weight.type == 1) {
         if(del == 0){
            we <- 1:n
         } else {
@@ -34,7 +34,7 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
            we[(n-del+1):n] <- n-del-(1:del)
         }     
     }
-    if (weight == 2) {
+    if (weight.type == 2) {
     
         #Epanechnikov-Kern:
         epa <- function(xi,x = 0,h = 1){
@@ -49,7 +49,7 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
             mis <- 1
         }
         ydat <- y[x0 + xdat]
-        erg <- WRMfit(xdat, ydat, 0, weight = we)
+        erg <- WRMfit(xdat, ydat, 0, weight.vec = we)
         slope[x0] <- erg[2]
         level[x0] <- erg[1]
     }
@@ -80,10 +80,9 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
     if (mis == 1) {
         cat("WARNING: Series contains missings \n")
     }
-    weight.names <- c("Triangular", "Epanechnikov", "Gaussian",
-        "Biweight", "Uniform")
+    weight.names <- c("Equal", "Triangular", "Epanechnikov")
     return(structure(list(y = y, level = level, slope = slope,
-        del = del, width = width, weight = weight.names[weight], ts.name = ts.name),
+        del = del, width = width, weight.type = weight.names[weight.type+1], ts.name = ts.name),
         class = "wrm.filter"))
 }
 
@@ -95,9 +94,7 @@ wrm.filter<-function (y, width, weight = 1, del = floor(width/2), extrapolate = 
 plot.wrm.filter <- function(x, ...) {
     # Length of the time series
     N <- length(x$y)
-    # Weight names
-    weight <- x$weight
-    
+
     # Setting the y-limits
     ylims <- c(min(x$y,min(x$level,na.rm=TRUE),na.rm=TRUE),max(x$y,max(x$level,na.rm=TRUE),na.rm=TRUE))
     xlims <- c(1,N)
@@ -139,4 +136,4 @@ print.wrm.filter <- function(x, ...) {
       print(Sl[1,])
       cat(N-5," observations omitted \n")
     }
-    }
+}

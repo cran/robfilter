@@ -4,21 +4,13 @@
 
 \alias{madore.filter}
 
-\title{A Robust Adaptive Online Filter for Multivariate Time Series}
+\title{A multivariate adaptive online repeated median filter}
 
-\description{
-Procedure for robust online extraction of a \emph{signal} from a multivariate time series by a moving window technique with adaptive window width selection (\emph{m}ultivariate \emph{ad}aptive \emph{o}nline \emph{re}peated median filter). The window width adaption is based on the univariate \code{adore.filter}.
-}
+\description{Procedure for robust signal extraction from a multivariate time series by a moving window technique with adaptive window width selection (\emph{m}ultivariate \emph{ad}aptive \emph{o}nline \emph{re}peated median filter). The window width adaption is based on the univariate \code{adore.filter}.}
 
-\usage{madore.filter(Y, byrow=FALSE, 
-                 min.width=20, max.width=200, start.width=min.width, 
-                 test.sample.size=min.width/2, width.search="geometric", 
-                 rtr.size=10, extr.delay=0, 
-                 NA.sample.size=10, minNonNAs=5)
-}
+\usage{madore.filter(Y, byrow=FALSE, min.width=10, max.width=200, test.sample.size=min.width/2, width.search="geometric", rtr.size=min.width, alpha=0.1, NA.sample.size=min.width, minNonNAs=min.width/2)}
 
-\arguments{
-\item{Y}{a numeric matrix or (multivariate) time series object.}
+\arguments{\item{Y}{a numeric matrix or (multivariate) time series object.}
 
 \item{byrow}{logical. If \code{FALSE} (the default), the filtering is done by columns, otherwise the filtering is done by rows.}
 
@@ -26,9 +18,7 @@ Procedure for robust online extraction of a \emph{signal} from a multivariate ti
 
 \item{max.width}{a positive integer \eqn{\ge} \code{min.width} specifying the maximal width of the moving time window. If \code{min.width} = \code{max.width}, the window width is fixed.}
 
-\item{start.width}{a positive integer \eqn{\ge} \code{min.width}, \eqn{\le} \code{max.width} specifying the width of the first time window and thus the time point of the first signal estimation.}
-
-\item{test.sample.size}{a positive integer \eqn{\ge 5}, \eqn{\le} \code{min.width} defining a test window which indicates the rightmost/recent \code{test.sample.size} time points within the current time window. The \emph{Repeated Median} (RM) regression residuals within the test window are used for a goodness of fit test (see \code{adore.filter}) which serves for determining an adequate window width at the given time point. For more details about the test, see Schettlinger, Fried, Gather (2008).}
+\item{test.sample.size}{a positive integer in [5, \code{min.width}] defining a test window of the rightmost \code{test.sample.size} time points within the current time window. The \emph{Repeated Median} (RM) regression residuals within the test window are used for a goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2008).}
 
 \item{width.search}{a character string defining the search algorithm used for finding an adequate window width at each point in time.
     \describe{
@@ -50,16 +40,14 @@ Procedure for robust online extraction of a \emph{signal} from a multivariate ti
 
 \item{rtr.size}{a non-negative integer specifying the size of a subset of the most recent observations within each window. The signal estimation is restricted to the range of the observations within this subset.}
 
-\item{extr.delay}{a non-negative integer \eqn{\le \code{min.width}/2}. The signal at time t is estimated with a delay of \code{extr.delay} time points.}
+\item{alpha}{the level of significance for the goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2008).}
 
-\item{NA.sample.size}{a positive integer \eqn{\ge 10}, \eqn{\le \code{min.width}} specifying the size of a subset of the most recent observations within each window. See \code{minNonNAs}.}
+\item{NA.sample.size}{a positive integer in [10, \code{min.width}] specifying the size of a subset of the most recent observations within each window. See \code{minNonNAs}.}
 
-\item{minNonNAs}{a positive integer \eqn{\ge 5}, \eqn{\le \code{NA.sample.size}}. If a variable does not offer at least \code{minNonNAs} non-missing observations within the subset specified by \code{NA.sample.size}, the signal is not estimated for this variable at this time point \eqn{t}.}
+\item{minNonNAs}{a positive integer in [5, \code{NA.sample.size}]. If a variable does not offer at least \code{minNonNAs} non-missing observations within the subset specified by \code{NA.sample.size}, the signal is not estimated for this variable at this time point \eqn{t}.}
 }
 
-\details{
-The \code{madore.filter} is based on \emph{Repeated Median} regression (Siegel, 1982) in moving time windows and serves for separating signals from noise and outliers in multivariate time series. At each time point \eqn{t} the test procedure of the \emph{adaptive online Repeated Median} filter (Schettlinger, Fried, Gather, 2008) is used to determine an appropriate window width \eqn{n(t) \in [\code{min.width}, \code{max.width}]}. Then the signal vector at time t is estimated within the time window \eqn{(t-n(t)+1,\ldots,t)} by a slight modification of the multivariate \emph{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). A more detailed description of the \code{madore.filter} can be found in Borowski, Schettlinger, Gather (2009).
-}
+\details{The \code{madore.filter} is based on \emph{Repeated Median} regression (Siegel, 1982) in moving time windows and serves for separating signals from noise and outliers in multivariate time series. At each time point \eqn{t} the test procedure of the \emph{adaptive online Repeated Median} filter (Schettlinger, Fried, Gather, 2008) is used to determine an appropriate window width \eqn{n(t)} in [\code{min.width}, \code{max.width}]. Then the signal vector at time \eqn{t} is estimated within the time window \eqn{(t-n(t)+1,\ldots,t)} by a slight modification of the multivariate \emph{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). A more detailed description of the \code{madore.filter} can be found in Borowski, Schettlinger, Gather (2009).}
 
 \value{
 \code{madore.filter} returns an object of class \code{madore.filter}. An object of class \code{madore.filter} is a list containing the following components:
@@ -69,7 +57,7 @@ The \code{madore.filter} is based on \emph{Repeated Median} regression (Siegel, 
 In addition, the original input data is returned as list member \code{Y}, and the settings used for the analysis are returned as the list members \code{byrow}, \code{min.width}, \code{max.width}, \code{start.width}, \code{test.sample.size}, \code{width.search}, \code{rtr.size}, \code{extr.delay}, \code{NA.sample.size}, and \code{minNonNAs}. Application of the function \code{plot} to an object of class \code{madore.filter} returns a plot showing the original multivariate time series with the filtered output.
 }
 
-\references{ 
+\references{
 Borowski, M., Schettlinger, K., Gather, U. (2009)
 Multivariate Real Time Signal Extraction by a Robust Adaptive Regression Filter, 
 \emph{Communications in Statistics - Simulation and Computation} \bold{38}, 426-440.\cr
@@ -92,12 +80,8 @@ Robust Regression Using Repeated Medians,
 \seealso{\code{\link{robreg.filter}}, \code{\link{adore.filter}}.}
 
 \examples{
-# load multivariate time series sample
 data(multi.ts)
-
-# extract signals from 'multi.ts' by madore.filter
-# this may take some time, depending on your system
-extr <- madore.filter(multi.ts, min.width=30, max.width=100, extr.delay=5)
+extr <- madore.filter(multi.ts)
 plot(extr)
 }
 

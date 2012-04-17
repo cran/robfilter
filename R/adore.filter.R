@@ -1,6 +1,12 @@
-adore.filter <- function(y, p.test = 15, minNonNAs = 5,
-                       min.width = 11, max.width = 100, width.search="geometric",
-                       rtr=2, extrapolate=TRUE, calc.qn = FALSE) {
+adore.filter <- function(y, 
+                         p.test = 15, 
+                         minNonNAs = 5,
+                         min.width = 11, 
+                         max.width = 100, 
+                         width.search="geometric",
+                         rtr=2, 
+                         extrapolate=TRUE, 
+                         calc.qn = FALSE){
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Validity check
