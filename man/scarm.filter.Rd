@@ -2,9 +2,9 @@
 \alias{scarm.filter}       
 \title{SCARM (Slope Comparing Adaptive Repeated Median)}
 
-\description{A procedure for robust online signal extraction from univariate time series by a moving window technique with adaptive window width selection based on the Repeated Median regression}
+\description{A procedure for robust online signal extraction from univariate time series ("smoothing") by a moving window technique with adaptive window width selection based on Repeated Median regression}
 
-\usage{scarm.filter(x, right.width=15, min.left.width=right.width, min.width=floor(right.width/3), max.width=200, sign.level=0.001, bound.slope.diff=0, bound.noise.sd=0, rtr=TRUE)}
+\usage{scarm.filter(x, right.width=15, min.left.width=right.width, min.width=floor(right.width/3), max.width=200, sign.level=0.001, bound.noise.sd=0.01, rtr=TRUE, noise.sd.est.method="Q.adj", autocorrelations="no")}
 
 \arguments{
 \item{x}{a numeric vector or (univariate) time series object.}
@@ -13,19 +13,19 @@
 \item{min.width}{a positive integer \eqn{\ge 5} specifying the minimum window width.}
 \item{max.width}{a positive integer \eqn{\ge} \code{min.width} and \eqn{\ge} \code{right.width} + \code{min.left.width} specifying the maximum window width.}
 \item{sign.level}{significance level of the test procedure; must be a value in \eqn{(0,0.5)}.}
-\item{bound.slope.diff}{a lower bound for the absolute difference of the Repeated Median slopes in the left-hand and right-hand window; if this absolute difference is smaller than 'bound.slope.diff', the window width is not decreased; must be a value \eqn{> 0}.}
-\item{bound.noise.sd}{a lower bound for the estimation of the noise standard deviation; this bound ensures that the noise estimation is zero due to ties in the data; must be a value \eqn{> 0}.}
+\item{bound.noise.sd}{a lower bound for the estimate of the noise standard deviation; this bound ensures that the noise scale estimate cannot be zero due to ties in the data; must be a value \eqn{> 0}.}
 \item{rtr}{if \code{rtr=TRUE}, the signal estimation is restricted to the range of the rightmost \code{min.width} observations.}
+\item{noise.sd.est.method}{the method for estimating the noise standard deviation; \code{noise.sd.est.method} must be either "Q.adj" (default), "MAD", "Qn" or "SD" (MAD, Qn and SD estimate the noise scale on the residuals, whereas Q.adj is a model-free noise scale estimator, see Gelper et al., 2009).}
+\item{autocorrelations}{the \code{scarm.filter} is developed for non-autocorrelated data, but can be adapted to work with autocorrelations; \code{autocorrelations} must be either "no" (default), "high.positive", "moderate.positive", "small.positive", "small.negative", "moderate.negative" or "high.negative".}
 }
 
 \details{
-The scarm.filter works by applying Repeated Median (RM) regression (Siegel, 1982) to a moving time window with a length varying between min.width and max.width.
+The scarm.filter fits a Repeated Median (RM, Siegel, 1982) regression line to a moving window sample with length varying between \code{min.width} and \code{max.width}.
 
-For each point in time, the window width is adapted to the current data situation by a test which is based on the comparison of two RM slopes estimated in separated sub-windows, a right-hand and a left-hand window.
+For each time point, the window width is adapted to the current data situation by a test comparing two RM slopes estimated in separated sub-windows, a right-hand and a left-hand window.
 
-A more detailed description of the filter can be found in Borowski and Fried (2012).
+A more detailed description of the filter can be found in Borowski and Fried (2011).
 }
-
 
 \value{
 \code{scarm.filter} returns an object of class \code{scarm.filter}.  
@@ -33,14 +33,15 @@ An object of class \code{scarm.filter} is a list containing the
 following components:
 
 \item{signal.est}{a vector containing the signal estimations}
-\item{slope.est}{a vector containing the slope estimations}
+\item{slope.est}{a vector containing the slope (or trend) estimations}
 \item{adapted.width}{a vector containing the adapted window widths}
 \item{test.statistic}{a vector containing the SCARM test statistics}
 \item{critvals}{a vector containing the critical values for test decision}
-\item{noise.sd}{a vector containing the noise standard deviation estimated by a regression-free scale estimator (Gelper et al., 2009)}
+\item{noise.sd}{a vector containing the estimates of the noise standard deviation}
 \item{slope.diff}{a vector containing the differences of the Repeated Median slopes estimated in the left-hand and right-hand window}
+\item{tseries}{the original input data}
 
-In addition, the original input data and the input arguments used for the analysis are returned as list members.
+In addition, the input arguments used for the analysis are returned as list members.
 
 Application of the function \code{plot} to an object of class
 \code{scarm.filter} returns a plot showing the original time series 
@@ -49,10 +50,8 @@ with the filtered output.
 
 
 \references{ 
-Borowski, M., Fried, R. (2012)
-Robust moving window regression for online signal extraction from
-non-stationary time series: online window width adaption by testing for
-signal changes, submitted.\cr
+Borowski, M. and Fried, R. (2011)
+Robust repeated median regression in moving windows with data-adaptive width selection, Discussion Paper 28/2011, SFB 823, TU Dortmund University.\cr
 
 Gelper, S., Schettlinger, K., Croux, C., and Gather, U. (2009)
 Robust online scale estimation in time series: A model-free approach,

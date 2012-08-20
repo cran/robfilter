@@ -1,4 +1,4 @@
-935c1a300fc94c7eeee8cc87351e6e53 *DESCRIPTION
+adba45dd558d672bcc5406a321a7eba1 *DESCRIPTION
 982b5164d075587189f6370300d5403e *NAMESPACE
 1129c4fc600e0af5b96fffb6fbbaa12d *R/adore.filter.R
 dffc989c982b7c9e9983a3e3ea06b5ea *R/dr.filter.R
@@ -8,13 +8,13 @@ bad3c322313fe8e7d35d26f7d6719fb2 *R/hybrid.filter.R
 cfe7b77e875958a60533995df6c7247c *R/lms.filter.R
 e283cf55c862a62a42a17076262fdd07 *R/lqd.filter.R
 659cb564739d2c5c1f4331d398b9dd1e *R/lts.filter.R
-e0440d3069a27761c0dd697fa1a2bf35 *R/madore.filter.R
+b0932ac6c2ef751cb50be03ea089bf04 *R/madore.filter.R
 2d933b2ff86f7bbddbb718930e28ae5a *R/med.filter.R
 f968af470740431e4efd2815fa520b80 *R/rm.filter.R
 85d9eca22b1fec001b4c14cfd011dbfb *R/robregfilter.R
 4e1b459e6b7f9b6595a3c2f8c5435fb5 *R/robust-filter.R
 f83b94d7c37356a1824030eb0542c690 *R/scale.r
-deb469cd769338ff20200e0a053b269e *R/scarm.filter.R
+d7b98a183d16d6995e573e8f7bdc2d8b *R/scarm.filter.R
 50bef2e8c98924375d10884c75470ab8 *R/sysdata.rda
 d825739370dce577e630beb813546a57 *R/trend.r
 944b62cfa5394778b0a2523d0c3f47b2 *R/weighted-quantile-top.R
@@ -28,9 +28,9 @@ dd504b3645f0a60bcf58c885dea9f002 *data/const.rda
 97815597394ea1ad24c4d1d4ce615e87 *data/dfs.rda
 03a87d661e97bd2f0d97c37ee8e95e85 *data/multi.ts.rda
 50bef2e8c98924375d10884c75470ab8 *data/sysdata.rda
-e0cabc807cf1d1540e484718debf5b7b *data/var.n.rda
-9f5f1b45bd6f1534ac0b708e8e3430c9 *inst/doc/getting_started.pdf
-59d627bb1b570afd0049fd091c40134b *inst/doc/index.html
+e7c3998b3abab707bdedc13eb4e5e3f0 *data/var.n.rda
+3deb31c483217c83d62de211858c0395 *inst/doc/getting_started.pdf
+23cd423bc346deefac39e5d3b45d194c *inst/doc/index.html
 29f023ed69e5f2714ab176a51cb13736 *man/adore.filter.Rd
 20fbdcbd3d7a55a5190c97d7c874943a *man/const.Q.Rd
 203e25a3c1278312e2d60dcef3ba96cf *man/const.Rd
@@ -49,7 +49,7 @@ f95af7d97bc0c5756399547296350066 *man/multi.ts.Rd
 f0a7ea95ef782c825319d57d6b169a79 *man/robfilter-package.Rd
 5e3c998e3ddf0f54b6d7b7a84ad18cd9 *man/robreg.filter.Rd
 a3544538bd69711ec38c786d7016e550 *man/robust.filter.Rd
-2c9e96b90feb28fbdfe86a47b7469381 *man/scarm.filter.Rd
+ea4484b3a6755d659dc4d9f4a2aeb926 *man/scarm.filter.Rd
 8e500cd0b9398edc97ec92a02e3ce208 *man/sizecor.Rd
 5b85f705fb60231d320d193ff06ca193 *man/timecor.Rd
 323c51eaf0c7c11a3103cfadb2416963 *man/var.n.Rd

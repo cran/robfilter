@@ -1,3 +1,6 @@
+data(critvals)
+data(const)
+
 madore.filter <- function(Y, byrow=FALSE, 
                              min.width=10, 
                              max.width=200,
@@ -7,7 +10,6 @@ madore.filter <- function(Y, byrow=FALSE,
                              alpha=0.1,
                              NA.sample.size=min.width, 
                              minNonNAs=min.width/2){
-
 
 ################
 # Preparations #
@@ -43,7 +45,7 @@ madore.filter <- function(Y, byrow=FALSE,
     if(min.width < 10){
         min.width <- 10
         warning("'min.width' must be at least 10; 'min.width' is set to 10.\n")
-    }
+        }
         
     if(!is.numeric(test.sample.size))
         stop("'test.sample.size' must be numeric.\n")
@@ -51,7 +53,7 @@ madore.filter <- function(Y, byrow=FALSE,
     if(test.sample.size < 5){
         test.sample.size <- 5
         warning("'test.sample.size' must be at least 5; 'test.sample.size' is set to 5.\n")
-    }
+        }
              
     if(width.search!="linear" & width.search!="binary" & width.search!="geometric")
         stop("'width.search' must be a character, either 'linear', 'binary' or 'geometric'.\n")
@@ -62,7 +64,7 @@ madore.filter <- function(Y, byrow=FALSE,
     if(rtr.size < 0){
         rtr.size <- 0
         warning("'rtr.size' must be at least 0; 'rtr.size' is set to 0.\n")
-    }
+        }
         
     if(!is.numeric(NA.sample.size))
         stop("'NA.sample.size' must be numeric.\n")
@@ -70,7 +72,7 @@ madore.filter <- function(Y, byrow=FALSE,
     if(NA.sample.size < 5){
         NA.sample.size <- 5
         warning("'NA.sample.size' must be at least 5; 'NA.sample.size' is set to 5.\n")
-    }
+        }
         
     if(!is.numeric(minNonNAs))
         stop("'minNonNAs' must be numeric.\n")
@@ -86,9 +88,6 @@ madore.filter <- function(Y, byrow=FALSE,
 ######################
 # Internal functions #
 ######################
-
-    data(critvals)
-    data(const)
 
     get.test.sample.size <- function(n, test.sample.size){
         if(test.sample.size > n/2) return(floor(n/2))
@@ -299,7 +298,7 @@ madore.filter <- function(Y, byrow=FALSE,
 ###################
     for(i in n:N){
         # apply aoRM to obtain individual window widths
-        Y.win <- Y[(i-n+1):i,]
+        Y.win <- as.matrix(Y[(i-n+1):i,])
         for(k in 1:K){
             indiv.widths[k] <- aoRM.function(x=Y.win[,k], B=B[[k]])
         }
@@ -312,7 +311,7 @@ madore.filter <- function(Y, byrow=FALSE,
             if(K.t == 1){
                 index <- (n-indiv.widths[position]+1):n
                 beta.RM <- get.beta.RM(B[[position]][index,index])
-                mu.RM <- get.mu.RM(x,beta.RM)
+                mu.RM <- get.mu.RM(Y.win2, beta.RM)
                 signals[i,position] <- mu.RM
             }
             if(K.t > 1){
@@ -418,5 +417,5 @@ plot.madore.filter <- function(x, ...){
         lines(x$Y[,i])
         lines(x$signals[,i], col=2, lwd=1)
     }
-    legend(x="topleft", bty="n", legend=c("Time Series", "Signal extraction"), lty=c(1,1), col=c(1,2), lwd=c(1,1))
+    legend(x="topleft", bty="n", legend=c("Data", "Signal extraction"), lty=c(1,1), col=c(1,2), lwd=c(1,1))
 }
