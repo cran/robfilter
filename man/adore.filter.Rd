@@ -8,29 +8,23 @@ components (the \emph{signal}) from a univariate time series by a moving window 
 adaptive window width selection (ADaptive Online REpeated median FILTER).
 }
 
-\usage{adore.filter(y, p.test = 15, minNonNAs = 5,
-                min.width = 11, max.width = 100, width.search="geometric",
-                rtr=2, extrapolate=TRUE, calc.qn = FALSE)
-      }
+\usage{
+adore.filter(y,
+             p.test=15, minNonNAs=5,
+             min.width=10, max.width=200,
+             width.search="geometric",
+             rtr=2, extrapolate=FALSE,
+             calc.qn=FALSE, sign.level=0.1)
+}
 
 \arguments{
 \item{y}{a numeric vector or (univariate) time series object.}
-\item{p.test}{defines the number of most recent Repeated Median residuals within each window
-used to test the goodness of fit of the online signal level. \cr
-It can be either a value in (0.25, 0.3, 0.5), meaning that \code{floor(p.test*width)} residuals are considered for the goodness of fit test,
-where \code{width} is the currently used window width, or
-it can also be a positive integer \code{>= 5} specifying a fixed number of most recent residuals (default). \cr
-If the number of residuals considered for the test exceeds \code{width/2}, the procedure sets it to \code{floor(width/2)}, 
-if it is smaller than five, the number is set to five.
-}
-\item{minNonNAs}{a positive integer \code{>= 5} defining the minimum number of
-    non-missing observations within one window which is required 
-    for a \sQuote{sensible} estimation.
-}
-\item{min.width}{a positive integer \code{>= 5} specifying the minimal window width.
-}
-\item{max.width}{a positive integer \code{>= min.width} specifying the maximal window width.
-}
+\item{p.test}{defines the number of most recent Repeated Median residuals within each window used to test the goodness of fit of the online signal level. \cr
+It can be either a value in (0.25, 0.3, 0.5), meaning that \code{floor(p.test*width)} residuals are considered for the goodness of fit test, where \code{width} is the currently used window width, or it can also be a positive integer \code{>= 5} specifying a fixed number of most recent residuals (default).\cr
+If the number of residuals considered for the test exceeds \code{width/2}, the procedure sets it to \code{floor(width/2)}, if it is smaller than five, the number is set to five.}
+\item{minNonNAs}{a positive integer \code{>= 5} defining the minimum number of non-missing observations within one window which is required for a \sQuote{sensible} estimation.}
+\item{min.width}{a positive integer \code{>= 5} specifying the minimal window width.}
+\item{max.width}{a positive integer \code{>= min.width} specifying the maximal window width.}
 \item{width.search}{a character string defining the search algorithm used for finding an adequate window width at each point in time.
     \describe{
     \item{\code{"linear"}}{The linear search always results in the largest window width possible and hence yields 
@@ -65,6 +59,7 @@ if it is smaller than five, the number is set to five.
 as an estimate of the standard deviation in each window.
 Here, the \code{Qn} command from the \code{robustbase} library is applied with the built-in finite sample correction.
 }
+\item{sign.level}{significance level of the test procedure; must be a value in \eqn{(0,0.5)}.}
 }
 
 
@@ -79,7 +74,7 @@ The critical value for the test decision corresponds to a slightly modified 0.95
 distribution of the test statistic and is stored in the data set \code{critvals}.
 
 A more detailed description of the filter can be found in 
-Schettlinger, Fried, Gather (2008).} 
+Schettlinger, Fried, Gather (2010).} 
 
 
 \value{ 
@@ -120,24 +115,24 @@ with the filtered output.
 %}
 
 \references{ 
-Schettlinger, K., Fried, R., Gather, U. (2008) 
+Rousseeuw, P. J., Croux, C. (1993)
+Alternatives to the Median Absolute Deviation,
+\emph{Journal of the American Statistical Association} \bold{88},
+1273-1283.
+
+Schettlinger, K., Fried, R., Gather, U. (2010) 
 Real Time Signal Processing by Adaptive Repeated Median Filters,
-\emph{International Journal of Adaptive Control and Signal Processing}, submitted.\cr
+\emph{International Journal of Adaptive Control and Signal Processing} \bold{24}(5), 346-362.\cr
 
 Siegel, A.F. (1982)
 Robust Regression Using Repeated Medians,
 \emph{Biometrika} \bold{69} (1), 
 242-244.\cr
-
-Rousseeuw, P. J., Croux, C. (1993)
-Alternatives to the Median Absolute Deviation,
-\emph{Journal of the American Statistical Association} \bold{88},
-1273-1283.
 }
 
 \author{Karen Schettlinger}
 
-\seealso{\code{\link{robreg.filter}}, \code{\link{wrm.filter}}, \code{\link{madore.filter}}.}
+\seealso{\code{\link{robreg.filter}}, \code{\link{wrm.filter}}, \code{\link{madore.filter}}, \code{\link{scarm.filter}}.}
 
 \examples{
 # # # # # # # # # #

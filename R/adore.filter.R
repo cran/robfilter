@@ -1,12 +1,14 @@
 adore.filter <- function(y, 
                          p.test = 15, 
                          minNonNAs = 5,
-                         min.width = 11, 
-                         max.width = 100, 
+                         min.width = 10, 
+                         max.width = 200, 
                          width.search="geometric",
                          rtr=2, 
-                         extrapolate=TRUE, 
-                         calc.qn = FALSE){
+                         extrapolate=FALSE, 
+                         calc.qn = FALSE, 
+                         sign.level=0.1
+                        ) {
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Validity check
@@ -24,8 +26,8 @@ adore.filter <- function(y,
     if(!is.numeric(min.width))
         stop("The minimal window width (min.width) must be numeric.\n")
 
-    if(min.width < 11)
-        stop("The minimal window width allowed is min.width=11.\n")
+    if(min.width < 5)
+        stop("The minimal window width allowed is min.width=5.\n")
     
     if(!(rtr %in% c(0,1,2)))
         stop("The parameter rtr must be either 0, 1 or 2.\n
@@ -48,12 +50,6 @@ adore.filter <- function(y,
         stop("The maximal window width (max.width)must be >= min.width or FALSE.\n")
     }
 
-    if((max.width > 600) || (is.logical(max.width) && !max.width)){
-        warning("For window widths larger than max.width=600 the critical values of
-        the test for reducing the window width are derived from a
-        hypergeometric distribution.\n")
-    }
-
     if(! (p.test %in% c(0.25, 0.3, 0.5, 5:120)))
         stop("p.test must be either 0.25, 0.3 or 0.5 as a fraction of
              observations for each window or a fixed integer in 5,...,120.\n")
@@ -68,10 +64,12 @@ adore.filter <- function(y,
         nI.start <- min(p.test, floor(min.width/2))
     }
 
-    if( !(width.search %in% c("linear","binary","geometric"))){
-        stop("width.search must be one of 'linear', 'binary' or 'geometric'.\n")
+    if( !(width.search %in% c("linear","binary","geometric","set.to.min"))){
+        stop("width.search must be one of 'linear', 'binary', 'geometric' or 'set.to.min'.\n")
     }
-
+    
+    if(sign.level <= 0 | sign.level > 0.5)
+        stop("'sign.level' must be a value in (0,0.5)")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Starting window width
@@ -98,9 +96,6 @@ adore.filter <- function(y,
         warning("The initial window width has been enlarged to ", start, ".\n")
     }
 
-
-
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Internal Functions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -109,13 +104,13 @@ adore.filter <- function(y,
     
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # Function to get the suitable critical value at each time
-    get.critval <- function(n, nI, critvals) {
-        alpha <- 0.1
-        if( n <= 600 ){
+    
+    get.critval <- function(n, nI) {
+        if( sign.level==0.1 & n <= 600  & nI <= 61 & n >=11 & nI >= 5){
             return(critvals[n, nI])
         } else {
             k <- n %% 2
-            return(2 * qhyper(1 - alpha/2, (n - k)/2, (n - k)/2, nI) - nI)
+            return(2 * qhyper(1 - sign.level/2, (n - k)/2, (n - k)/2, nI) - nI)
         }
     }
 
@@ -167,170 +162,185 @@ adore.filter <- function(y,
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Internal function for evaluation of the adequate window width + corresponding RM regression fit in this window
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    get.fit.and.n <- function(y=y, M=M, width.search=width.search, n=length(y), p.test=p.test, 
-                              min.width=min.width, max.width=max.width, minNonNAs=minNonNAs, rtr=rtr){
-        # Internal variables:
-        H      <- NULL # vector with the test decision of each iteration step
-        i      <- 0    # initialising iteration step counter
-        n.list <- n    # vector of window widths in each iteration step
-        n.low  <- min.width # window width 'boundaries'
-        n.up   <- n
-        y0     <- y    # initial observations in window
-        M0     <- M    # initial matrix of all pairwise observational slopes in the window
-    
-        all.levels.t <- NULL
-        all.slopes.t <- NULL
-        all.widths.t <- NULL
-    
-        repeat { # loop for window width adaptation
-            i   <- i+1 # iteration step counter
-            n.list[i] <- n
-            nI  <- max(5, get.nI(p.test, n)) # number of residuals for calculating the test statistic
-            I.t <- (n - nI + 1):n
-    
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Repeated Median estimation for more than minNonNAs observations are present at recent nI times
-    # else: NAs are returned for level and slope and the window width is not enlarged
-            if( sum(! is.na(y[I.t])) < ifelse( (nI < minNonNAs), nI, minNonNAs ) ){
-                level.t <- NA
-                slope.t <- NA
-                nt      <- n
-                all.levels.t <- NA
-                all.slopes.t <- NA
-                all.widths.t <- NA
-                break
-            }
-    
-            betas <- apply(M, 1, median, na.rm = TRUE)
-            if(any(! is.na(betas))) {
-                slope.t <- median(betas, na.rm = TRUE)
-                level.t <- median(y - slope.t * (-n + 1):0, na.rm = TRUE)
-    
-                all.levels.t[i] <- level.t
-                all.slopes.t[i] <- slope.t
-                all.widths.t[i] <- n
-            }
-    
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Calculation of residuals
-            res <- get.res(y, level.t, slope.t, n)
-           
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Test decision
-             reject.H0 <- (get.T(res[I.t]) > get.critval(n, nI, critvals))
-             H[i]      <- reject.H0 # Saving the test decision (0: do not reject H0, 1: reject H0)
-    
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Choice of new window width with geometric search
-            if(width.search=="geometric"){
+get.fit.and.n <- function(y=y, M=M){
+    # Internal variables:
+    n      <- length(y)
+    H      <- NULL # vector with the test decision of each iteration step
+    i      <- 0    # initialising iteration step counter
+    n.list <- n    # vector of window widths in each iteration step
+    n.low  <- min.width # window width 'boundaries'
+    n.up   <- n
+    y0     <- y    # initial observations in window
+    M0     <- M    # initial matrix of all pairwise observational slopes in the window
 
-                if( reject.H0 ){ # H0 rejected:
+    all.levels.t <- NULL
+    all.slopes.t <- NULL
+    all.widths.t <- NULL
 
-                    if(n == min.width){
-                        nt <- n # final window width = min.width
-                        break   # H0: "Fit is good" is rejected but window width cannot be reduced anymore
-                    }
-                    # 'new' window width for the next iteration (binary search)
-                    n.up <- n
-                    if( any(!H) ){
-                        n <- ceiling( mean(c(n.low,n.up)) ) 
-                    } else {
-                        n    <- max(n - 2^(i-1), min.width)
-                    }
+    repeat { # loop for window width adaptation
+        i   <- i+1 # iteration step counter
+        n.list[i] <- n
+        nI  <- get.nI(p.test, n) # number of residuals for calculating the test statistic
+        I.t <- (n - nI + 1):n
 
-                } else { # H0 not rejected:
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Repeated Median estimation for more than minNonNAs observations are present at recent nI times
+# else: NAs are returned for level and slope and the window width is not enlarged
+        if( sum(! is.na(y[I.t])) < ifelse( (nI < minNonNAs), nI, minNonNAs ) ){
+            level.t <- NA
+            slope.t <- NA
+            nt      <- n
+            all.levels.t <- NA
+            all.slopes.t <- NA
+            all.widths.t <- NA
+            break
+        }
 
-                    if(i==1){
-                        nt <- n # current width= final window width
-                        break   # because H0: "Fit is good" cannot be rejected
-                    }
-                    # 'new' window width for the next iteration (binary search)
-                    n.low <- n
+        betas <- apply(M, 1, median, na.rm = TRUE)
+        if(any(! is.na(betas))) {
+            slope.t <- median(betas, na.rm = TRUE)
+            level.t <- median(y - slope.t * (-n + 1):0, na.rm = TRUE)
+
+            all.levels.t[i] <- level.t
+            all.slopes.t[i] <- slope.t
+            all.widths.t[i] <- n
+        }
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Calculation of residuals
+        res <- get.res(y, level.t, slope.t, n)
+       
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Test decision
+         reject.H0 <- (get.T(res[I.t]) > get.critval(n, nI))
+         H[i]      <- reject.H0 # Saving the test decision (0: do not reject H0, 1: reject H0)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Choice of new window width with geometric search
+        if(width.search=="geometric"){
+
+            if( reject.H0 ){ # H0 rejected:
+
+                if(n == min.width){
+                    nt <- n # final window width = min.width
+                    break   # H0: "Fit is good" is rejected but window width cannot be reduced anymore
+                }
+                # 'new' window width for the next iteration (binary search)
+                n.up <- n
+                if( any(!H) ){
                     n <- ceiling( mean(c(n.low,n.up)) ) 
+                } else {
+                    n    <- max(n - 2^(i-1), min.width)
+                }
 
-                } # end of H0 not rejected
+            } else { # H0 not rejected:
 
-                # Final window width found:
-                if( (n%in% n.list) & ((n==n.low) | (n==n.up)) ){
+                if(i==1){
+                    nt <- n # current width= final window width
+                    break   # because H0: "Fit is good" cannot be rejected
+                }
+                # 'new' window width for the next iteration (binary search)
+                n.low <- n
+                n <- ceiling( mean(c(n.low,n.up)) ) 
 
-                    max.n   <- max(which(!H))
-                    nt      <- all.widths.t[max.n]  # final window width
-                    n       <- nt
-                    slope.t <- all.slopes.t[max.n]  # final slope estimate
-                    level.t <- all.levels.t[max.n]  # final signal estimate
+            } # end of H0 not rejected
+
+            # Final window width found:
+            if( (n%in% n.list) & ((n==n.low) | (n==n.up)) ){
+
+                max.n   <- max(which(!H))
+                nt      <- all.widths.t[max.n]  # final window width
+                n       <- nt
+                slope.t <- all.slopes.t[max.n]  # final slope estimate
+                level.t <- all.levels.t[max.n]  # final signal estimate
+                w <- c((length(y0)-nt+1):length(y0))
+                y <- y0[w]    # data vector for next step
+                M <- M0[w,w]  # matrix with slopes in next step
+                break
+            } 
+            
+            # internals for next iteration
+            w <- c((length(y0)-n+1):length(y0))
+            y <- y0[w]   
+            M <- M0[w,w] 
+
+        } # end of geometric search
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Choice of new window width with linear one-step search
+        if(width.search=="linear"){
+            if( (n == min.width) || !reject.H0 ){
+                nt   <- n
+                break  # H0: "Fit is good" cannot be rejected or window width cannot be reduced
+            } else {   # H0: "Fit is good" is rejected
+                n     <- n - 1     # -> reduce window width by 1 and re-estimate level and slope in smaller window
+                y     <- y[-1]     # data vector in next iteration
+                M     <- M[-1, -1] # matrix with slopes in next iteration
+            }
+        } # end of linear one-step search
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Choice of new window width with binary search
+        if(width.search=="binary"){
+             if(i ==1){
+                if( (n != min.width) & reject.H0 ){
+                     n <- min.width  # fit next time in window with minimal window width
+                } else  {
+                    nt <- n
+                    break        # fit with current window width is appropriate
+                }
+            # further iterations:
+            } else {
+                if(reject.H0){
+                    if(n == min.width){
+                        nt   <- n
+                        break  # Although H0: "Fit is good" is rejected, the window width cannot be reduced anymore
+                    }
+                    n.up  <- n
+                } else {
+                    n.low <- n
+                }
+                # 'new' window width for the next iteration
+                n <- ceiling( mean(c(n.low,n.up)) )    
+                if( (n==n.up)|(n==n.low) ){
+                    max.non.rejected <- max(which(H==0))
+                    nt    <- all.widths.t[max.non.rejected]  # final window width
+                    slope.t<- all.slopes.t[max.non.rejected]  # final slope estimate
+                    level.t<- all.levels.t[max.non.rejected]  # final signal estimate
                     w <- c((length(y0)-nt+1):length(y0))
                     y <- y0[w]    # data vector for next step
                     M <- M0[w,w]  # matrix with slopes in next step
                     break
-                } 
-                
-                # internals for next iteration
-                w <- c((length(y0)-n+1):length(y0))
-                y <- y0[w]   
-                M <- M0[w,w] 
-
-            } # end of geometric search
-
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Choice of new window width with linear one-step search
-            if(width.search=="linear"){
-                if( (n == min.width) || !reject.H0 ){
-                    nt   <- n
-                    break  # H0: "Fit is good" cannot be rejected or window width cannot be reduced
-                } else {   # H0: "Fit is good" is rejected
-                    n     <- n - 1     # -> reduce window width by 1 and re-estimate level and slope in smaller window
-                    y     <- y[-1]     # data vector in next iteration
-                    M     <- M[-1, -1] # matrix with slopes in next iteration
                 }
-            } # end of linear one-step search
-    
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # Choice of new window width with binary search
-            if(width.search=="binary"){
-                 if(i ==1){
-                    if( (n != min.width) & reject.H0 ){
-                         n <- min.width  # fit next time in window with minimal window width
-                    } else  {
-                        nt <- n
-                        break        # fit with current window width is appropriate
-                    }
-                # further iterations:
-                } else {
-                    if(reject.H0){
-                        if(n == min.width){
-                            nt   <- n
-                            break  # Although H0: "Fit is good" is rejected, the window width cannot be reduced anymore
-                        }
-                        n.up  <- n
-                    } else {
-                        n.low <- n
-                    }
-                    # 'new' window width for the next iteration
-                    n <- ceiling( mean(c(n.low,n.up)) )    
-                    if( (n==n.up)|(n==n.low) ){
-                        max.non.rejected <- max(which(H==0))
-                        nt    <- all.widths.t[max.non.rejected]  # final window width
-                        slope.t<- all.slopes.t[max.non.rejected]  # final slope estimate
-                        level.t<- all.levels.t[max.non.rejected]  # final signal estimate
-                        w <- c((length(y0)-nt+1):length(y0))
-                        y <- y0[w]    # data vector for next step
-                        M <- M0[w,w]  # matrix with slopes in next step
-                        break
-                    }
-                }
-                w <- c((length(y0)-n+1):length(y0))
-                y <- y0[w]    # data vector in next iteration
-                M <- M0[w,w]  # matrix with slopes in next iteration
-            } # end of width.search = "binary"
+            }
+            w <- c((length(y0)-n+1):length(y0))
+            y <- y0[w]    # data vector in next iteration
+            M <- M0[w,w]  # matrix with slopes in next iteration
+        } # end of width.search = "binary"
 
-        } # end of repeat-loop for window width adaptation
-    
-    return(list(y=y, level=level.t, slope=slope.t, width=nt, M=M,
-                all.levels.t=all.levels.t, all.slopes.t=all.slopes.t, all.widths.t=all.widths.t, 
-                I.t=I.t, nI=nI))
-    
-    }
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Set new window width to min.width
+        if(width.search=="set.to.min"){
+            if( n < 2*p.test || !reject.H0 ){
+                nt   <- n
+                break  # H0: "Fit is good" cannot be rejected or window width cannot be reduced
+            } else {   # H0: "Fit is good" is rejected
+                w <- (n-min.width+1):n
+                n <- min.width     # -> set window width to minimum and re-estimate level and slope in smaller window
+                y <- y[w]    # data vector in next iteration
+                M <- M[w, w] # matrix with slopes in next iteration
+            }
+        } # end of linear one-step search
 
+
+
+    } # end of repeat-loop for window width adaptation
+
+return(list(y=y, level=level.t, slope=slope.t, width=nt, M=M,
+            all.levels.t=all.levels.t, all.slopes.t=all.slopes.t, all.widths.t=all.widths.t, 
+            I.t=I.t, nI=nI))
+
+}
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Internal Objects and Starting Values
@@ -362,10 +372,6 @@ adore.filter <- function(y,
         M[k, -k] <- (y[k] - y[-k]) / (I.win[k] - I.win[-k])
     }
 
-
-
-
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # MAIN PROGRAMME LOOP OVER ALL TIME POINTS
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -373,8 +379,7 @@ adore.filter <- function(y,
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Evaluate adequate window width and Repeated Median estimates
-         fit.n.t <- get.fit.and.n(y=y, M=M, width.search=width.search,n=length(y), p.test=p.test, 
-                                  min.width=min.width, max.width=max.width, minNonNAs=minNonNAs, rtr=rtr)
+        fit.n.t <- get.fit.and.n(y=y, M=M)
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         # Re-allocate internal objects
@@ -448,20 +453,6 @@ adore.filter <- function(y,
  
     return( structure( result , class="adore.filter") )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Default output

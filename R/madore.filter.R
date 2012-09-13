@@ -7,7 +7,7 @@ madore.filter <- function(Y, byrow=FALSE,
                              test.sample.size=min.width/2,
                              width.search="geometric", 
                              rtr.size=min.width,
-                             alpha=0.1,
+                             sign.level=0.1,
                              NA.sample.size=min.width, 
                              minNonNAs=min.width/2){
 
@@ -82,8 +82,8 @@ madore.filter <- function(Y, byrow=FALSE,
         warning("'minNonNAs' must be at least 5; 'minNonNAs' is set to 5.\n")
     }
 
-    if(alpha <= 0 | alpha > 0.5)
-        stop("alpha must be a value in (0,0.5)")
+    if(sign.level <= 0 | sign.level > 0.5)
+        stop("sign.level must be a value in (0,0.5)")
 
 ######################
 # Internal functions #
@@ -95,10 +95,10 @@ madore.filter <- function(Y, byrow=FALSE,
     }
 
     get.critval <- function(n, test.sample.size){
-        if(n <= 600 & n > 10 & alpha==0.1){
+        if(n <= 600 & n > 10 & sign.level==0.1){
             return(as.numeric(critvals[n, test.sample.size]))  
         } else {
-            return(2 * qhyper(1 - alpha/2, floor(n/2), floor(n/2), test.sample.size) - test.sample.size)
+            return(2 * qhyper(1 - sign.level/2, floor(n/2), floor(n/2), test.sample.size) - test.sample.size)
         }
     }
 
@@ -135,8 +135,8 @@ madore.filter <- function(Y, byrow=FALSE,
         dnqn   <- qchisq(0.95, dim(dat)[2]) * median(di.qn)/ qchisq(0.5, dim(dat)[2])
         kov    <- cov(cbind(x,dat)[di.qn <= dnqn,])
         beta   <- kov[1,2:(dim(dat)[2]+1)] / kov[1,1]
-        alpha  <- apply(dat[di.qn <= dnqn,], 2, mean) - (beta * mean(x))
-        hat.y  <- alpha + beta*(length(x))
+        sign.level  <- apply(dat[di.qn <= dnqn,], 2, mean) - (beta * mean(x))
+        hat.y  <- sign.level + beta*(length(x))
         return(hat.y)
     }
     
@@ -273,7 +273,6 @@ madore.filter <- function(Y, byrow=FALSE,
 ####################
 # Internal objects #
 ####################
-    library(robustbase)
     if(byrow==TRUE) Y <- t(Y)
     N <- dim(Y)[1]
     K <- dim(Y)[2]

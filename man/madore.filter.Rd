@@ -8,7 +8,14 @@
 
 \description{Procedure for robust signal extraction from a multivariate time series by a moving window technique with adaptive window width selection (\emph{m}ultivariate \emph{ad}aptive \emph{o}nline \emph{re}peated median filter). The window width adaption is based on the univariate \code{adore.filter}.}
 
-\usage{madore.filter(Y, byrow=FALSE, min.width=10, max.width=200, test.sample.size=min.width/2, width.search="geometric", rtr.size=min.width, alpha=0.1, NA.sample.size=min.width, minNonNAs=min.width/2)}
+\usage{
+madore.filter(Y, byrow=FALSE,
+              min.width=10, max.width=200,
+              test.sample.size=min.width/2,
+              width.search="geometric",
+              rtr.size=min.width, sign.level=0.1,
+              NA.sample.size=min.width, minNonNAs=min.width/2)
+}
 
 \arguments{\item{Y}{a numeric matrix or (multivariate) time series object.}
 
@@ -18,7 +25,7 @@
 
 \item{max.width}{a positive integer \eqn{\ge} \code{min.width} specifying the maximal width of the moving time window. If \code{min.width} = \code{max.width}, the window width is fixed.}
 
-\item{test.sample.size}{a positive integer in [5, \code{min.width}] defining a test window of the rightmost \code{test.sample.size} time points within the current time window. The \emph{Repeated Median} (RM) regression residuals within the test window are used for a goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2008).}
+\item{test.sample.size}{a positive integer in [5, \code{min.width}] defining a test window of the rightmost \code{test.sample.size} time points within the current time window. The \emph{Repeated Median} (RM) regression residuals within the test window are used for a goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2010).}
 
 \item{width.search}{a character string defining the search algorithm used for finding an adequate window width at each point in time.
     \describe{
@@ -40,14 +47,14 @@
 
 \item{rtr.size}{a non-negative integer specifying the size of a subset of the most recent observations within each window. The signal estimation is restricted to the range of the observations within this subset.}
 
-\item{alpha}{the level of significance for the goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2008).}
+\item{sign.level}{the level of significance for the goodness of fit test (see \code{adore.filter}) for finding an adequate window width. For more details about the test, see Schettlinger, Fried, Gather (2010).}
 
 \item{NA.sample.size}{a positive integer in [10, \code{min.width}] specifying the size of a subset of the most recent observations within each window. See \code{minNonNAs}.}
 
 \item{minNonNAs}{a positive integer in [5, \code{NA.sample.size}]. If a variable does not offer at least \code{minNonNAs} non-missing observations within the subset specified by \code{NA.sample.size}, the signal is not estimated for this variable at this time point \eqn{t}.}
 }
 
-\details{The \code{madore.filter} is based on \emph{Repeated Median} regression (Siegel, 1982) in moving time windows and serves for separating signals from noise and outliers in multivariate time series. At each time point \eqn{t} the test procedure of the \emph{adaptive online Repeated Median} filter (Schettlinger, Fried, Gather, 2008) is used to determine an appropriate window width \eqn{n(t)} in [\code{min.width}, \code{max.width}]. Then the signal vector at time \eqn{t} is estimated within the time window \eqn{(t-n(t)+1,\ldots,t)} by a slight modification of the multivariate \emph{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2004). A more detailed description of the \code{madore.filter} can be found in Borowski, Schettlinger, Gather (2009).}
+\details{The \code{madore.filter} is based on \emph{Repeated Median} regression (Siegel, 1982) in moving time windows and serves for separating signals from noise and outliers in multivariate time series. At each time point \eqn{t} the test procedure of the \emph{adaptive online Repeated Median} filter (Schettlinger, Fried, Gather, 2010) is used to determine an appropriate window width \eqn{n(t)} in [\code{min.width}, \code{max.width}]. Then the signal vector at time \eqn{t} is estimated within the time window \eqn{(t-n(t)+1,\ldots,t)} by a slight modification of the multivariate \emph{Trimmed Repeated Median-Least Squares} regression (Lanius, Gather, 2010). A more detailed description of the \code{madore.filter} can be found in Borowski, Schettlinger, Gather (2009).}
 
 \value{
 \code{madore.filter} returns an object of class \code{madore.filter}. An object of class \code{madore.filter} is a list containing the following components:
@@ -59,25 +66,24 @@ In addition, the original input data is returned as list member \code{Y}, and th
 
 \references{
 Borowski, M., Schettlinger, K., Gather, U. (2009)
-Multivariate Real Time Signal Extraction by a Robust Adaptive Regression Filter, 
-\emph{Communications in Statistics - Simulation and Computation} \bold{38}, 426-440.\cr
+Multivariate Real Time Signal Extraction by a Robust Adaptive Regression Filter, \emph{Communications in Statistics - Simulation and Computation} \bold{38}, 426-440.\cr
 
-Lanius, V., Gather, U. (2007)
+Lanius, V., Gather, U. (2010)
 Robust Online Signal Extraction from Multivariate Time Series, 
-\emph{Technical Report 38/07, SFB 475, Universität Dortmund, Germany.}\cr
+\emph{Computational Statistics and Data Analysis} \bold{54}(4), 966-975.\cr
 
-Schettlinger, K., Fried, R., Gather, U. (2009) 
+Schettlinger, K., Fried, R., Gather, U. (2010) 
 Real Time Signal Processing by Adaptive Repeated Median Filters,
-\emph{International Journal of Adaptive Control and Signal Processing, Special Issue on 'Signal Processing and Diagnosis: Biomedical Applications'}, to appear.\cr
+\emph{International Journal of Adaptive Control and Signal Processing} \bold{24}(5), 346-362.\cr
 
 Siegel, A.F. (1982)
 Robust Regression Using Repeated Medians, 
-\emph{Biometrika} \bold{69} (1), 242-244.\cr
+\emph{Biometrika} \bold{69}(1), 242-244.\cr
 }
 
 \author{Matthias Borowski}
 
-\seealso{\code{\link{robreg.filter}}, \code{\link{adore.filter}}.}
+\seealso{\code{\link{robreg.filter}}, \code{\link{adore.filter}}, \code{\link{scarm.filter}}, \code{\link{mscarm.filter}}.}
 
 \examples{
 data(multi.ts)
