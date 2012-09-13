@@ -77,12 +77,14 @@ Robust Regression Using Repeated Medians,
 \seealso{\code{\link{robreg.filter}}, \code{\link{adore.filter}}, \code{\link{madore.filter}}, \code{\link{scarm.filter}}.}
 
 \examples{
+\dontrun{
 # Multivariate time series
 data(multi.ts)
 
 # apply MSCARM Filter 
 mscarm.extr <- mscarm.filter(multi.ts)
 plot(mscarm.extr)
+}
 }
 \keyword{robust}
 \keyword{smooth}

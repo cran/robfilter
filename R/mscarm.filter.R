@@ -1,6 +1,6 @@
-data(dfs)
-data(const.Q)
-data(var.n)
+#data(dfs)
+#data(const.Q)
+#data(var.n)
 
 mscarm.filter <- function(time.series,
                           # input arguments of the univariate SCARM
@@ -797,7 +797,6 @@ print.mscarm.filter <- function(x, ...){
 ########
 
 plot.mscarm.filter <- function(x, info=FALSE,...){
-    library(lattice)
     if(info==TRUE){
         par(mfrow=c(2,1))
     } else {

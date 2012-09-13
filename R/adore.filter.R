@@ -100,7 +100,7 @@ adore.filter <- function(y,
 # Internal Functions
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # Loading of critical values for the test of adequacy of the current fit in each time window
-    data(critvals)
+    #data(critvals)
     
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # Function to get the suitable critical value at each time

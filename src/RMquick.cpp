@@ -2,6 +2,8 @@
 // University of Dortmund
 
 #include "RMquick.h"
+#include <R.h>
+#include <Rmath.h>
 //#include <iostream>
 
 int MEDIAN_LINKS(int anz)
@@ -27,9 +29,19 @@ int MEDIAN_LINKS(int anz)
 };*/
 
 
-#ifndef BORLAND_WIN
+/*#ifndef BORLAND_WIN
 int random(int a)
 {
   return (int)((((double)rand())/((double)RAND_MAX))*a);
+};
+#endif*/
+
+#ifndef BORLAND_WIN
+int random(int a)
+{
+  GetRNGstate();
+  int f = (int) runif(0, a);
+  PutRNGstate();
+  return f;
 };
 #endif

@@ -1,5 +1,5 @@
-data(critvals)
-data(const)
+#data(critvals)
+#data(const)
 
 madore.filter <- function(Y, byrow=FALSE, 
                              min.width=10, 

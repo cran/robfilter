@@ -20,6 +20,8 @@ typedef uint64_t u__int64;
 
 #include <float.h>
 #include <math.h>
+#include <R.h>
+#include <Rmath.h>
 
 #include <R_ext/Print.h> // for Rprintf
 #include <time.h> // for time
@@ -214,7 +216,7 @@ class LQDAdvanced
             vector<double>::iterator nth = cutsY.begin() + min(transformedInputSize / 2 + h_over_2 - 1, transformedInputSize - 1);
             nth_element(cutsY.begin(),nth,cutsY.end());
             if (*nth<=optY) {
-              // Wähle linkeste Lösung
+              // W?hle linkeste L?sung
               if (*nth==optY)
               {
                 _noOfSols++;
@@ -274,13 +276,20 @@ class LQDAdvanced
     }
   }
 
-  int randomInteger(int low_bound , int up_bound){
+  /*int randomInteger(int low_bound , int up_bound){
   	up_bound -= low_bound;
   	double f = 1.0f;
   	while (f == 1.0f){
   		f = (double (rand())) / ((double)(RAND_MAX));
   	}
   	return low_bound + (int)(f * (up_bound+1));
+  }*/
+  
+  int randomInteger(int low_bound, int up_bound) {
+      GetRNGstate();
+      int f = (int) runif(low_bound, up_bound);
+      PutRNGstate();
+      return f;
   }
 
   /**
@@ -308,7 +317,7 @@ class LQDAdvanced
         int zufall2;
         
         // ******* Sebastian Ruthe ********
-        srand( (unsigned int)time(NULL) ); // besser wäre es natürlich dies nur einmal zu tun
+        //srand( (unsigned int)time(NULL) ); // besser w?re es nat?rlich dies nur einmal zu tun
         
         // ********************************
                
@@ -442,7 +451,7 @@ class LQDAdvanced
       //type conversions.
       
 //      printf("Random nach letzter Addition %f\n",(float)random);
-//      if (random>to) printf("Größer!!!");
+//      if (random>to) printf("Gr??er!!!");
     }
     while (random>to);
     return random;

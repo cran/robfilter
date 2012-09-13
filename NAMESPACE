@@ -38,6 +38,7 @@ S3method(plot, scarm.filter)
 S3method(plot, mscarm.filter)
 
 importFrom(robustbase, Sn, Qn)
-importFrom(MASS, ltsreg, lmsreg)
+importFrom(MASS, ltsreg, lmsreg, lqs)
+import(lattice)
 
 useDynLib(robfilter) 

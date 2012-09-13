@@ -1,5 +1,5 @@
-data(dfs)
-data(var.n)
+#data(dfs)
+#data(var.n)
 
 scarm.filter <- function(time.series, 
                          right.width=30, 

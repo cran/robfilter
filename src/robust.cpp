@@ -23,13 +23,15 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <R.h>
+#include <Rmath.h>
 using namespace std;
 
 const int numberOfRegressionMethods = 6;
 const char* regressionMethodNames[numberOfRegressionMethods] =  {"LQD", "RM", "LMS", "LTS", "DR", "MED"};
 // const char* regressionMethodNames[numberOfRegressionMethods] =  {"DR", "LMS", "LQD", "LTS", "MED", "RM"};
 
-double randomGaussianValues(double mean, double Stdev){
+/*double randomGaussianValues(double mean, double Stdev){
 //Could also use rnorm from <RMath.h>.
 	double v1 = (double)(rand()) / (double)(RAND_MAX);
 	double v2 = (double)(rand()) / (double)(RAND_MAX);
@@ -39,6 +41,13 @@ double randomGaussianValues(double mean, double Stdev){
 	} while (p >1);
 	double x = (2 * v1 - 1) * sqrt(- log(p) / p );
 	return sqrt(Stdev) * x + mean;
+}*/
+
+double randomGaussianValues(double mean, double Stdev){
+  GetRNGstate();
+  double f = rnorm(mean, Stdev);
+  PutRNGstate();
+  return f;
 }
 
 class RobustReg {
