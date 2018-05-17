@@ -132,7 +132,7 @@ robreg.filter <- function(y,                    # input time series data (numeri
     slope[,i] <- r[[i]]$slope
   }
 
-   if ((!all(is.na(level)))&(!all(is.na(slope)))){# die NA's waren in der Eingabe so unguenstig verteilt, dass nur NA geschätzt wurden
+   if ((!all(is.na(level)))&(!all(is.na(slope)))){# die NA's waren in der Eingabe so unguenstig verteilt, dass nur NA geschaetzt wurden
         return( structure( list( level=as.data.frame(level), slope=as.data.frame(slope), 
                            y=y, width=width, method=method.names, 
                            minNonNAs=minNonNAs, online=online, extrapolate=extrapolate, ts.name=ts.name),

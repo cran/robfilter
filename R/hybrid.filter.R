@@ -12,7 +12,7 @@ hybrid.filter <- function(y,                # input time series data (numeric ve
                           extrapolate=TRUE  # indicator for extrapolation of the estimations to the edges        
                           ){
 ### FIXME:
-sub.minNonNAs <- minNonNAs # minimal number required in each window half -> ALS ZUSÄTZLICHE OPTION???
+sub.minNonNAs <- minNonNAs # minimal number required in each window half -> ALS ZUSAETZLICHE OPTION???
 ###
 
   ## save the name of the input time series

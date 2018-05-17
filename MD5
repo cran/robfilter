@@ -1,9 +1,9 @@
-b049a747236cd6bb732f906d94ded03c *DESCRIPTION
-972004b084ee990d6678268ffde5adac *NAMESPACE
+d4f0d2929bb71da37971b727c37438a6 *DESCRIPTION
+204a683f7df8070f75f0476b25929db0 *NAMESPACE
 98bf9f0805d583a3a10ccb8a4bc0be96 *R/adore.filter.R
 dffc989c982b7c9e9983a3e3ea06b5ea *R/dr.filter.R
 12bd537d6dc42cd28f55486b8db93171 *R/dw.filter.R
-bad3c322313fe8e7d35d26f7d6719fb2 *R/hybrid.filter.R
+8e8b7a29d059502ee7d514bb236e584c *R/hybrid.filter.R
 7e4eb975cde4a01844296c6c0d789e89 *R/kernels.r
 cfe7b77e875958a60533995df6c7247c *R/lms.filter.R
 e283cf55c862a62a42a17076262fdd07 *R/lqd.filter.R
@@ -12,7 +12,7 @@ e283cf55c862a62a42a17076262fdd07 *R/lqd.filter.R
 2d933b2ff86f7bbddbb718930e28ae5a *R/med.filter.R
 ca8913b1a3662023d74362c5fe0366a1 *R/mscarm.filter.R
 f968af470740431e4efd2815fa520b80 *R/rm.filter.R
-85d9eca22b1fec001b4c14cfd011dbfb *R/robregfilter.R
+71c67213436e99259d4554f021d77fbc *R/robregfilter.R
 4e1b459e6b7f9b6595a3c2f8c5435fb5 *R/robust-filter.R
 f83b94d7c37356a1824030eb0542c690 *R/scale.r
 e8f22d9657d0525ec7e0a87c95ba77e7 *R/scarm.filter.R
@@ -23,6 +23,7 @@ d825739370dce577e630beb813546a57 *R/trend.r
 4a1cfb45f349bc15fc32fb0e8b0637fd *R/wrm-filter.R
 31086cf617d167de69bf99b7485d5291 *R/wrm-fit.r
 ed34ec3325131ca822c09a5ce5161cef *R/wrm-smooth.R
+812367db58f0aba796b820b467a291e4 *build/partial.rdb
 a12c5be6c440909e076e8446ba6ecad1 *data/const.Q.rda
 dd504b3645f0a60bcf58c885dea9f002 *data/const.rda
 2689bb3a5ab270f87ee94abcbcc6220c *data/critvals.rda
@@ -48,7 +49,7 @@ b72ed7c9546eb651961ec5ca909d4551 *man/madore.filter.Rd
 3bfa4ad62ba6b579c688608df5ca6ce9 *man/mscarm.filter.Rd
 f95af7d97bc0c5756399547296350066 *man/multi.ts.Rd
 55649044c6ec656c146380ae276bbf93 *man/rm.filter.Rd
-f0a7ea95ef782c825319d57d6b169a79 *man/robfilter-package.Rd
+da1bba8d00ec1c15ae628773a8a89bee *man/robfilter-package.Rd
 5e3c998e3ddf0f54b6d7b7a84ad18cd9 *man/robreg.filter.Rd
 a3544538bd69711ec38c786d7016e550 *man/robust.filter.Rd
 b7cdfb765fdaf0b07dc8a0c1dafe3bee *man/scarm.filter.Rd
@@ -71,6 +72,7 @@ ef70a5dd4168166b09e58b49d32c0a58 *src/RegLine.cpp
 60aafb618a556db689bb0a9b9ee6aec6 *src/RegLine.h
 e8f019e5a3f4a8e856cb937800787a5c *src/hammock.cpp
 715eb4244773f43b228e3d65a260dcdd *src/hammock.h
+e7b1b1b7e0ae52d6a6fcc308a0457a20 *src/robfilter_init.c
 92287ac562e1e7f9ba0c7415393c86fe *src/robust.cpp
 625f06bc99a884c2caa6358f2130fca1 *src/segment_tree.cpp
 b50c04312b22456d439263a29f5a5048 *src/segment_tree.h

@@ -39,6 +39,9 @@ S3method(plot, mscarm.filter)
 
 importFrom(robustbase, Sn, Qn)
 importFrom(MASS, ltsreg, lmsreg, lqs)
+importFrom(graphics, axis, legend, lines, par, plot, points, text)
+importFrom(utils, combn)
 import(lattice)
+import(stats)
 
-useDynLib(robfilter) 
+useDynLib(robfilter, .registration = TRUE) 

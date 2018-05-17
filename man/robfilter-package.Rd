@@ -2,30 +2,17 @@
 \alias{robfilter-package}
 \alias{robfilter}
 \docType{package}
-
-\title{robfilter - Robust time series filters}
-
+\title{
+\packageTitle{robfilter}
+}
 \description{
-A set of functions for signal extraction from univariate and multivariate time series based on concepts from robust statistics.
+\packageDescription{robfilter}
 }
-
 \details{
-\tabular{ll}{
-Package: \tab robfilter\cr
-Version: \tab 3.0\cr
-Date: \tab 2011-07-22\cr
-Depends: \tab R (>= 2.5.0), robustbase, MASS\cr
-License: \tab GPL (>= 2)\cr
-URL: \tab 
-http://www.statistik.tu-dortmund.de/fried.html\cr
-LazyData: \tab yes\cr
-Repository: \tab CRAN\cr
-Packaged: \tab 2011-07-22 11:20:52 UTC; borowski\cr
-Date/Publication: \tab 2011-07-22 11:40:35\cr
-Built: \tab R 2.13.1; i386-pc-mingw32; 2011-07-22 07:44:45 UTC; windows\cr
-}
 
-Index:
+The DESCRIPTION file:
+\packageDESCRIPTION{robfilter}
+\packageIndices{robfilter}
 \preformatted{
 adore.filter            A Robust Adaptive Online Repeated Median Filter
                         for Univariate Time Series
@@ -59,13 +46,8 @@ wrm.filter              Weighted Repeated Median Filters for Univariate
 wrm.smooth              Weighted Repeated Median Smoothing
 }
 }
-
 \author{
-Roland Fried <fried@statistik.tu-dortmund.de>, Karen Schettlinger <schettlinger@statistik.tu-dortmund.de> and Matthias Borowski <borowski@statistik.tu-dortmund.de>
-Maintainer: Matthias Borowski <borowski@statistik.tu-dortmund.de> and Roland Fried <fried@statistik.tu-dortmund.de>
-}
+\packageAuthor{robfilter}
 
-\keyword{robfilter}
-\keyword{filter}
-\keyword{robust}
-\keyword{time series}
+Maintainer: \packageMaintainer{robfilter}
+}
