@@ -231,6 +231,7 @@ returned for \code{level}, \code{slope} and \code{sigma}.
 
 
 \examples{
+\dontrun{
 # Generate random time series:
 y <- cumsum(runif(500)) - .5*(1:500)
 # Add jumps:
@@ -248,6 +249,7 @@ plot(y.dw)
 # Filtering with trimmed RM and double window TRM only:
 y2.dw <- dw.filter(y, outer.width=31, inner.width=11, method=c("TRM","DWTRM"))
 plot(y2.dw)
+}
 }
 
 \keyword{robust}

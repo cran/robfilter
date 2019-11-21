@@ -1,5 +1,5 @@
 // Es wird in keinsterweise garantiert, dass dieses Programm fehlerfrei ist.
-// Es ist daher nicht für den Einsatz in sicherheitskritischen Anwendungen
+// Es ist daher nicht f?r den Einsatz in sicherheitskritischen Anwendungen
 // geeignet. Recycle allocated something using new
 
 #include "hammock.h"
@@ -177,7 +177,7 @@ void Hammock::dissect_R(Edge *lose,Line *neueLinie)
   neueLinie->addSchnitt(lose);//,x);
 }
 
-// Gibt neue lose Kante zurück
+// Gibt neue lose Kante zur?ck
 
 Edge * Hammock::dissectEdge(Edge *lose, Edge *e, int e_dir)
 {
@@ -196,7 +196,7 @@ Edge * Hammock::dissectEdge(Edge *lose, Edge *e, int e_dir)
    const double x = calcSchnitt(lose->getLine(), e->getLine());
 
    //Falls die Kante e falsch herum durchlaufen wurde
-   //muss diese Richtung auf e2 übertragen werden
+   //muss diese Richtung auf e2 ?bertragen werden
 
    //Notation from Bernholt & Fried 2003
    // f_i   = lose
@@ -368,7 +368,7 @@ void Hammock::computeLXX(void)
 
     }
   }
-};
+}/*;*/
 
 /*
 void Hammock::testMedian(){
@@ -390,7 +390,7 @@ void Hammock::testMedian(){
  	std::cout << "Median gesamt ist " << gesamt_median_test << std::endl;
 }*/
 
-// Die einzufügende Linie muss eine größere Steigung haben als alle vorhandenen
+// Die einzuf?gende Linie muss eine gr??ere Steigung haben als alle vorhandenen
 int Hammock::addPunkt(double m,double b)
 {
   // Neue Linie erzeugen
@@ -422,10 +422,10 @@ int Hammock::addLine(Line *neuL)
 
   lineTab->append(neuL);
 
-  // In linke Begrenzung einfügen
+  // In linke Begrenzung einf?gen
   Edge *lose = dissect_L(neuL);
 
-  // Flags löschen
+  // Flags l?schen
 
   L->getLine()->mark=1;
 
@@ -490,7 +490,7 @@ int Hammock::addLine(Line *neuL)
 void Hammock::delLine(void)
 {
 
-  // Flags löschen
+  // Flags l?schen
     L->getLine()->mark=0;
   //std::cout<< "get Last Line done" << std::endl;
 
@@ -811,14 +811,14 @@ public:
   };
   void putLMS(double s)
   {
-    int nichts=1;
+    /*int nichts=1; Note SA: commented out because of set but not used warning */
     count++;
     schnitt=s;
-    for(int i=0;i<anz;i++)
+    /*for(int i=0;i<anz;i++)
       if (med[i]==s)
         {
           nichts=0;
-        }
+        }*/
   };
   debug_test_class(void)
   {

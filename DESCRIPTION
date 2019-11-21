@@ -1,20 +1,48 @@
 Package: robfilter
-Version: 4.1.1
-Date: 2018-05-16
+Version: 4.1.2
+Date: 2019-11-17
 Title: Robust Time Series Filters
-Author: Roland Fried <fried@statistik.tu-dortmund.de>, Karen
-        Schettlinger <schettlinger@statistik.tu-dortmund.de> and
-        Matthias Borowski <borowski@statistik.tu-dortmund.de>
+Authors@R: c(person("Roland", "Fried", 
+                    email = "fried@statistik.tu-dortmund.de", 
+                    role = c("aut", "cre")),
+             person("Karen", "Schettlinger", 
+                    email = "schettlinger@statistik.tu-dortmund.de",
+                    role = "aut"),
+             person("Matthias", "Borowski",
+                    email = "borowski@statistik.tu-dortmund.de",
+                    role = "aut"),
+             person("Robin", "Nunkesser", 
+                    role = "ctb"),
+             person("Thorsten", "Bernholt",
+                    role = "ctb"))
+Author: Roland Fried [aut, cre],
+  Karen Schettlinger [aut],
+  Matthias Borowski [aut],
+  Robin Nunkesser [ctb],
+  Thorsten Bernholt [ctb]
 Maintainer: Roland Fried <fried@statistik.tu-dortmund.de>
 Imports: stats, graphics, utils
-Depends: R (>= 2.5.0), robustbase, MASS, lattice
-Description: A set of functions to filter time series based on concepts
-        from robust statistics.
+Depends: R (>= 3.6.0), robustbase, MASS, lattice
+Description: Implementations for several robust procedures that allow for (online)
+        extraction of the signal of univariate or multivariate time series by
+        applying robust regression techniques to a moving time window are provided.
+        Included are univariate filtering procedures based on repeated-median 
+        regression as well as hybrid and trimmed filters derived from it; 
+        see Schettlinger et al. (2006) <doi:10.1515/BMT.2006.010>. The adaptive 
+        online repeated median by Schettlinger et al. (2010) <doi:10.1002/acs.1105> 
+        and the slope comparing adaptive repeated median by Borowski and Fried (2013) 
+        <doi:10.1007/s11222-013-9391-7> choose the width of the moving time 
+        window adaptively. Multivariate versions are also provided; see  
+        Borowski et al. (2009) <doi:10.1080/03610910802514972> for a multivariate 
+        online adaptive repeated median and Borowski (2012) <doi:10.17877/DE290R-14393>  
+        for a multivariate slope comparing adaptive repeated median. Furthermore, 
+        a repeated-median based filter with automatic outlier replacement and 
+        shift detection is provided; see Fried (2004) <doi:10.1080/10485250410001656444>.
 License: GPL (>= 2)
 URL: http://www.statistik.tu-dortmund.de/fried.html
 LazyData: yes
 Repository: CRAN
 NeedsCompilation: yes
-RoxygenNote: 6.0.1
-Packaged: 2018-05-16 19:00:08 UTC; abbas
-Date/Publication: 2018-05-17 08:36:38 UTC
+SystemRequirements: C++11
+Packaged: 2019-11-17 11:13:58 UTC; abbas
+Date/Publication: 2019-11-21 14:00:02 UTC

@@ -662,7 +662,7 @@ __declspec(dllexport)
                                        epsilonI,
                                        minNumNonNAs);
   }
-  catch (std::exception e) {
+  catch (std::exception & e) {
     error(e.what());
   }
   return result;

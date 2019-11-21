@@ -155,7 +155,7 @@ void LQDAdvanced::removePunkt()
 bool LQDAdvanced::lessBW::operator()(const LQDAdvanced::p_cutAndInfo &firstOp,const LQDAdvanced::p_cutAndInfo &secondOp) const
 {
 	return ((firstOp.p->value < secondOp.p->value) || ((firstOp.p->value==secondOp.p->value) && (((firstOp.p->origin>secondOp.p->origin)&&(firstOp.p->ascending)&&(!secondOp.p->ascending))||((firstOp.p->origin<secondOp.p->origin)&&((firstOp.p->ascending)||(!secondOp.p->ascending))))));
-};
+}/*;*/
 
 
 
@@ -226,7 +226,7 @@ bool LQDAdvanced::lessFMax::operator()(const LQDAdvanced::p_cutAndInfo &firstOp,
     	if (computeLQDAdvanced.transformedInput[firstOp.p->origin].slope<0) less=!less;
   	}
   	return less;
-  };
+  }/*;*/
 
 //---------------------------------------------------------------------------
 

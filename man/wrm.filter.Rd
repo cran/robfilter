@@ -69,7 +69,7 @@ showing the original time series with the filtered output. }
 \references{These filtering procedures are described and investigated in \cr
 Fried, R., Einbeck, J., Gather, U. (2007), Weighted Repeated Median Smoothing and Filtering, 
 \emph{Journal of the American Statistical Association} \bold{102}, 1300-1308. \cr
-Preliminary version available as technical report from \url{www.sfb475.uni-dortmund.de/berichte/tr33-05.pdf} 
+    Preliminary version available as technical report from \url{https://eldorado.tu-dortmund.de/handle/2003/21637} 
 }
 \author{Roland Fried and Jochen Einbeck}
 

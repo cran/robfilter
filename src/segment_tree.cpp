@@ -85,7 +85,7 @@
       }
     }
     return ergPos-size+1;
-  };
+  }/*;*/
 
   void SegmentTree::add(int l,int r,int wert)
   {
@@ -116,7 +116,7 @@
        add(&seg,&ak,0);
       }
     }
-  };
+  }/*;*/
 
   void SegmentTree::add(Interval *seg,Aktion *ak, int updateValue)
   {
@@ -187,7 +187,7 @@
     }
 
     return;
-  };
+  }/*;*/
 
   void SegmentTree::set(int pos, int wert)
   {
@@ -195,14 +195,14 @@
     Aktion ak(0,pos,pos,wert);
 
     add(&seg,&ak,0);
-  };
+  }/*;*/
 
   void SegmentTree::extend(int wert)
   {
     max_r++;
     modulo++;
     set(max_r,wert);
-  };
+  }/*;*/
 
 
 //---------------------------------------------------------------------------

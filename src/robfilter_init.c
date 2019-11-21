@@ -8,7 +8,10 @@
 */
 
 /* .Call calls */
-extern SEXP robustRegression(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+/*extern SEXP robustRegression(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+ * Note SA: commented out because of "type of 'robustRegression' not not match original declaration' warning
+ */
+extern SEXP robustRegression(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"robustRegression", (DL_FUNC) &robustRegression, 8},

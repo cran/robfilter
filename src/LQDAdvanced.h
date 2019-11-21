@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <limits>
+#include <functional>
 
 
 //#include "values.h"
@@ -579,7 +580,7 @@ class LQDAdvanced
     compareTo.value=fmax;
     compareTo.ascending=true;
     compareTo.origin=std::numeric_limits<short>::max();
-    vector<p_cutAndInfo>::iterator sortEnd=partition(cutp.begin(),cutp.end(),bind2nd(less<p_cutAndInfo>(),p_compareTo));
+    vector<p_cutAndInfo>::iterator sortEnd=partition(cutp.begin(),cutp.end(),std::bind(less<p_cutAndInfo>(),std::placeholders::_1,p_compareTo));
     vector<p_cutAndInfo>::iterator sameLine=cutp.begin();
     while (sameLine!=sortEnd)
     {
@@ -590,7 +591,7 @@ class LQDAdvanced
     compareTo.value=0;
     compareTo.ascending=true;
     compareTo.origin=std::numeric_limits<short>::max();
-    sortEnd=partition(cutp.begin(),sortEnd,bind2nd(greater<p_cutAndInfo>(),p_compareTo));
+    sortEnd=partition(cutp.begin(),sortEnd,std::bind(greater<p_cutAndInfo>(),std::placeholders::_1,p_compareTo));
     sort(cutp.begin(),sortEnd,lessBW(*this));
     vector<p_cutAndInfo>::iterator sortBegin=cutp.begin();
     while(sortBegin!=sortEnd)
@@ -668,7 +669,7 @@ class LQDAdvanced
     vector<p_cutAndInfo>::iterator cutIt=fmidCuts->cutp.begin();
     int level = transformedInputSize / 2 + 1;
     maxLevel = level;
-    double lastcut;
+    /*double lastcut; Note SA: commented out because of set but not used warning*/
     while (cutIt!=fmidCuts->cutp.end())
     {
       if (!(*cutIt).p->ascending) {
@@ -699,7 +700,7 @@ class LQDAdvanced
       if ((*(cutIt)).p->ascending) {
         level--;
       }
-      lastcut=(*cutIt).p->value;
+      /*lastcut=(*cutIt).p->value;*/
       ++cutIt;
     }
     if (countSolutions!=0) best=-actBest/countSolutions;

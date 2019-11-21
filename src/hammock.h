@@ -1,6 +1,6 @@
 // Programmed by Thorsten Bernholt
 // University of Dortmund
-// Nicht für den Einsatz in medizinischen Geräten geeignet
+// Nicht f?r den Einsatz in medizinischen Ger?ten geeignet
 
 #ifndef HammockH
 #define HammockH
@@ -75,12 +75,12 @@ public:
 //Reusing old memory
 template <class T> class Recycle
 {
-  T **tab; // Zwischenspeicher für gelöschtes
-  T *heap; // großer Speicherblock
+  T **tab; // Zwischenspeicher f?r gel?schtes
+  T *heap; // gro?er Speicherblock
   int poolMax;
   int heapMax;
 public:
-	int poolCount;   // nächste freie Stelle
+	int poolCount;   // n?chste freie Stelle
 	  int heapCount;
 
   Recycle(void)
@@ -100,7 +100,7 @@ public:
   }
 
   // Es werden enBlock heapSize viele Elemente reserviert
-  // Und im Fall einer Löschung poolSize viele aufgehoben
+  // Und im Fall einer L?schung poolSize viele aufgehoben
   void setSpace(int poolSize,int heapSize)
   {
      heapMax=heapSize;
@@ -188,7 +188,7 @@ class Hammock:public RMbase
   Edge *R; // Points to the right top edge
   Line *border_L,*border_R; // Linke und rechte Grenzen
   int anzLines;
-  int windowSize;	// größes des Fensters das über die statistischen Daten geschoben wird
+  int windowSize;	// gr??es des Fensters das ?ber die statistischen Daten geschoben wird
   double *medTab;
 
   CircularArray<Line*>* lineTab;
@@ -366,7 +366,7 @@ void printLine(const int nr)
 
   void adjust_H_wLen(int newWindowSize, int subsetSize)
   {
-	  windowSize = windowSize;
+	  windowSize = newWindowSize;
 	  h=subsetSize;
   }
 

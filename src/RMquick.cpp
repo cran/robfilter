@@ -16,7 +16,7 @@ int MEDIAN_LINKS(int anz)
     m=0;
   
   return (m);
-};
+}/*;*/
 
 /*int MEDIAN_RECHTS(int anz)
 {
@@ -43,5 +43,5 @@ int random(int a)
   int f = (int) runif(0, a);
   PutRNGstate();
   return f;
-};
+}/*;*/
 #endif
