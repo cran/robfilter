@@ -204,7 +204,7 @@ Bernholt, T., Fried, R., Gather, U., Wegener, I. (2006)
 Modified Repeated Median Filters, 
 \emph{Statistics and Computing} \bold{16}, 
 177-192.\cr 
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr46-04.ps})
+(earlier version: \url{http://hdl.handle.net/2003/5298})
  
   
 Schettlinger, K., Fried, R., Gather, U. (2006) 

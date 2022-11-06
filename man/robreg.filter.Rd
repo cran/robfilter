@@ -98,13 +98,13 @@ Davies, P.L., Fried, R., Gather, U. (2004)
 Robust Signal Extraction for On-Line Monitoring Data, 
 \emph{Journal of Statistical Planning and Inference} \bold{122}, 
 65-78.\cr
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr02-02.ps})
+(earlier version: \url{http://hdl.handle.net/2003/5043})
 
 Gather, U., Schettlinger, K., Fried, R. (2006)
 Online Signal Extraction by Robust Linear Regression,
 \emph{Computational Statistics} \bold{21}(1), 
 33-51. \cr
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr53-04.ps})
+(earlier version: \url{http://hdl.handle.net/2003/5305})
   
 Schettlinger, K., Fried, R., Gather, U. (2006) 
 Robust Filters for Intensive Care Monitoring: Beyond the Running Median,

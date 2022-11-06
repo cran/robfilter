@@ -1,6 +1,6 @@
 Package: robfilter
-Version: 4.1.2
-Date: 2019-11-17
+Version: 4.1.3
+Date: 2022-11-06
 Title: Robust Time Series Filters
 Authors@R: c(person("Roland", "Fried", 
                     email = "fried@statistik.tu-dortmund.de", 
@@ -44,5 +44,6 @@ LazyData: yes
 Repository: CRAN
 NeedsCompilation: yes
 SystemRequirements: C++11
-Packaged: 2019-11-17 11:13:58 UTC; abbas
-Date/Publication: 2019-11-21 14:00:02 UTC
+Packaged: 2022-11-06 18:08:12 UTC; abbas
+Date/Publication: 2022-11-06 21:20:02 UTC
+RoxygenNote: 7.2.1

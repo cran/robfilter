@@ -156,9 +156,9 @@ with the filtered output.
 
 \references{
 Fried, R., Bernholt, T., Gather, U. (2006) 
-Repeated Median and Hybrid Filters, \emph{Computational Statistics \& Data Analysis} \bold{50}, 
+Repeated Median and Hybrid Filters, \emph{Computational Statistics & Data Analysis} \bold{50}, 
 2313-2338. \cr
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr10-04.ps})
+(earlier version: \url{http://hdl.handle.net/2003/4866})
 
 Schettlinger, K., Fried, R., Gather, U. (2006) 
 Robust Filters for Intensive Care Monitoring: Beyond the Running Median, \emph{Biomedizinische Technik} \bold{51}(2), 

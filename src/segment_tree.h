@@ -173,12 +173,12 @@ class Interval
 
 //begin class SegmentTree
 
-  int * data;   // Ein möglicher update-wert ist bereits enthalten
-  int * update; // Dieser Wert muss nur auf die Teilbäume angewandt werden
+  int * data;   // Ein moeglicher update-wert ist bereits enthalten
+  int * update; // Dieser Wert muss nur auf die Teilbaeume angewandt werden
   int * minPos;
-  int size;    // Anzahl der Blätter in 2^k gequantelt
-  int max_r;   // Anzahl der eingefügten Elemente -1 = Aufrufe von extend()
-  int modulo;  // Anzahl der eingefügten Elemente
+  int size;    // Anzahl der Blaetter in 2^k gequantelt
+  int max_r;   // Anzahl der eingefuegten Elemente -1 = Aufrufe von extend()
+  int modulo;  // Anzahl der eingefuegten Elemente
   int ergPos;
   int ergValue;
 

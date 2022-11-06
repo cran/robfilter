@@ -12,7 +12,7 @@ class Line
 {
    //friend class Hammock;
 
-   int links2,rechts2; // werden gesetzt beim Einfügen und Löschen
+   int links2,rechts2; // werden gesetzt beim Einfuegen und Loeschen
    
    int links,rechts; //Number of intersections on both sides of the median
    Edge *median_;    // der Pointer auf die median Kante   

@@ -161,11 +161,11 @@ before applying \code{robust.filter}.
 Fried, R. (2004), Robust Filtering of Time Series with 
 Trends, \emph{Journal of Nonparametric Statistics} \bold{16}, 
 313-328.\cr
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr30-03.ps})
+(earlier version: \url{http://hdl.handle.net/2003/4992})
 
 Fried, R., Gather, U. (2007), On Rank Tests for Shift Detection in Time Series, 
 \emph{Computational Statistics and Data Analysis, Special Issue on Machine Learning and Robust Data Mining} \bold{52}, 221-233.\cr
-(earlier version: \url{http://www.sfb475.uni-dortmund.de/berichte/tr48-06.pdf}) 
+(earlier version: \url{http://hdl.handle.net/2003/23301}) 
 
 Gather, U., Fried, R. (2004), Methods and Algorithms for Robust Filtering, 
 \emph{COMPSTAT 2004: Proceedings in Computational Statistics}, J. Antoch (eds.), Physika-Verlag, Heidelberg, 159-170. \cr 

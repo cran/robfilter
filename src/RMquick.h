@@ -29,7 +29,7 @@ void addMemo(char *t);
 int MEDIAN_LINKS(int anz);
 //int MEDIAN_RECHTS(int anz);
 
-//größeren
+//groesseren
 //#define MEDIAN_LINKS(__MED) (ceil((__MED+1.0)/2.0)-1)
 #ifndef BORLAND_WIN
 int random(int a);                // was soll hier passieren ????
@@ -39,7 +39,7 @@ class Median
 {
 
 /*  double *medTab;		// Array der Median werte 
-  int medTabSize;       // Länge des Arrays
+  int medTabSize;       // Laenge des Arrays
 
   	void vertausche(int a,int b)
     {
@@ -49,8 +49,8 @@ class Median
     };*/
     /* Ist eine Implementierung von 
      * Quickselect
-     * die den Median zurückliefert ( wenn n_thElement)
-     * geeignet gewählt wird)
+     * die den Median zurueckliefert ( wenn n_thElement)
+     * geeignet gewaehlt wird)
      * */
     
    /* int random(int a)
@@ -127,7 +127,7 @@ class Median
          }
        }
 
-       if (pivo<n_thElement) // median_links = berechnet # hälfte des arrays
+       if (pivo<n_thElement) // median_links = berechnet # haelfte des arrays
        {
          return computeMedian(pivo+1,R,n_thElement);
        }
@@ -185,7 +185,7 @@ public:
   };
   Punkt *tab;
   int windowSize;
-  int index;  //zeigt auf das nächste zu ersetzende Element
+  int index;  //zeigt auf das naechste zu ersetzende Element
   int max;
   Median med;
   double *slope;

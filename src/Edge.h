@@ -102,7 +102,7 @@ public:
 
   // Je nach dem, aus welcher Richtung eine Kante gefunden wird
   // zeigt sie gedanklich in verschieden Richtung
-  // thisDir und eDir geben mit =1 an, ob die tatsächliche Richtung
+  // thisDir und eDir geben mit =1 an, ob die tatsaechliche Richtung
   // umgekehrt ist.
   // antiDir=0 bedeuted, das ein Pfeilende und ein Pfeilanfang
   // aufeinandertreffen
