@@ -663,7 +663,7 @@ __declspec(dllexport)
                                        minNumNonNAs);
   }
   catch (std::exception & e) {
-    error(e.what());
+    error("%s", e.what());
   }
   return result;
 }
