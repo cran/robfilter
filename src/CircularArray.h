@@ -107,7 +107,7 @@ CircularArray<T>::CircularArray(int maxSize) : capacity(maxSize), next(0), len(0
 }
 
 template<typename T>
-CircularArray<T>::~CircularArray<T>()
+CircularArray<T>::~CircularArray()
 {
  delete[] data;
 }

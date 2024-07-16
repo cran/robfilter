@@ -1,4 +1,4 @@
-832687dcbf581f2c3972b2b9ecb865e1 *DESCRIPTION
+2f9dfd354924fd6a2b4ec537bc002eb1 *DESCRIPTION
 204a683f7df8070f75f0476b25929db0 *NAMESPACE
 98bf9f0805d583a3a10ccb8a4bc0be96 *R/adore.filter.R
 dffc989c982b7c9e9983a3e3ea06b5ea *R/dr.filter.R
@@ -23,7 +23,7 @@ d825739370dce577e630beb813546a57 *R/trend.r
 4a1cfb45f349bc15fc32fb0e8b0637fd *R/wrm-filter.R
 31086cf617d167de69bf99b7485d5291 *R/wrm-fit.r
 ed34ec3325131ca822c09a5ce5161cef *R/wrm-smooth.R
-221be5d20e8b1cdec38409967553bd77 *build/partial.rdb
+b4988945815ab2e77ba4c883ee3299ea *build/partial.rdb
 a12c5be6c440909e076e8446ba6ecad1 *data/const.Q.rda
 dd504b3645f0a60bcf58c885dea9f002 *data/const.rda
 2689bb3a5ab270f87ee94abcbcc6220c *data/critvals.rda
@@ -56,7 +56,7 @@ b7cdfb765fdaf0b07dc8a0c1dafe3bee *man/scarm.filter.Rd
 323c51eaf0c7c11a3103cfadb2416963 *man/var.n.Rd
 94e18510c5f9a2dbf26fa0d885fba6d6 *man/wrm.filter.Rd
 ca5538f495e1265e272558553794e611 *man/wrm.smooth.Rd
-686b3be2cdb54aa8fc0777e44cb8bc9d *src/CircularArray.h
+b274f4cb45fbc2bb60bb82c83bc87a2f *src/CircularArray.h
 710153935cb04d5ad7c05df2b92be7ea *src/Edge.h
 1bca0d5cfe8396c9e889a03642dd6f4c *src/LQDAdvanced.cpp
 785d7417fa4d6bb6bf012ecbcdd436c1 *src/LQDAdvanced.h
@@ -71,6 +71,6 @@ ef70a5dd4168166b09e58b49d32c0a58 *src/RegLine.cpp
 6314c91e28349b63ab80c7827e43ad7b *src/hammock.cpp
 8f8b19096edd2d725c4eff766b3ad7f7 *src/hammock.h
 bf9809221a0053f535eafa117e648f57 *src/robfilter_init.c
-48f2ac558f932d1e6bdaf9fe0c5c7e17 *src/robust.cpp
+e35c897e10e0679f854393b44ca7fe8a *src/robust.cpp
 6ee4af2311c8e0ace1232325463eb0da *src/segment_tree.cpp
 577e58ef9fbd32aea6faf20648849cf9 *src/segment_tree.h

@@ -1,6 +1,6 @@
 Package: robfilter
-Version: 4.1.4
-Date: 2023-12-03
+Version: 4.1.5
+Date: 2024-07-14
 Title: Robust Time Series Filters
 Authors@R: c(person("Roland", "Fried", 
                     email = "fried@statistik.tu-dortmund.de", 
@@ -43,6 +43,6 @@ URL: https://msnat.statistik.tu-dortmund.de/en/team/chair/
 LazyData: yes
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2023-12-03 19:18:09 UTC; abbas
-Date/Publication: 2023-12-06 03:30:02 UTC
+Packaged: 2024-07-14 14:44:17 UTC; abbas
+Date/Publication: 2024-07-16 09:20:05 UTC
 RoxygenNote: 7.2.1

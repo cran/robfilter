@@ -337,7 +337,7 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
      fensterbreite = windowWidth;
 
      if (windowWidth < 3) {
-        error("width must be >= 3");
+        perror("width must be >= 3");
      }
 
 
@@ -345,10 +345,10 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
             //XXX! When we call error, does the destructor get called?
             //No! Thus to avoid memory leaks, all these errors should
             //be converted to throws.
-            error("width <= 0");
+            perror("width <= 0");
      }
      if (fensterbreite > responseSize) {
-            error("width > responseSize");
+            perror("width > responseSize");
      }
 
      vector<RegLine*> results(numberOfRegressionMethods);
@@ -509,8 +509,8 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
                                SEXP centreExp, SEXP h, SEXP extrapolation, SEXP minNumNonNAsExp)
 	{
 
-     if (!isVector(response) && !isVectorizable(response) && !isFrame(response)) {
-        error("response is neither a data.frame nor vectorizable!");
+     if (!Rf_isVector(response) && !Rf_isVectorizable(response) && !Rf_isFrame(response)) {
+        perror("response is neither a data.frame nor vectorizable!");
      }
      //XXX! Why not just always require a double vector, forcing the caller
      //to take care of the conversions in R? Otherwise, should we warn the
@@ -518,19 +518,19 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 
 	// Daten aus response einlesen
 	    SEXP column = 0;
-		if (isFrame(response)) {
-			PROTECT(column = coerceVector(VECTOR_ELT(response, 0), REALSXP));
+		if (Rf_isFrame(response)) {
+			PROTECT(column = Rf_coerceVector(VECTOR_ELT(response, 0), REALSXP));
 		}
 		else {
-             PROTECT(column = coerceVector(response, REALSXP));
+             PROTECT(column = Rf_coerceVector(response, REALSXP));
         }
 
 	    int responseSize;
-        if (isMatrix(response)) {
-			responseSize = INTEGER(getAttrib(response,R_DimSymbol))[0];
+        if (Rf_isMatrix(response)) {
+			responseSize = INTEGER(Rf_getAttrib(response,R_DimSymbol))[0];
 		}
 		else {
-             responseSize = length(column);
+             responseSize = Rf_length(column);
         }
 
 		double* responseVector = new double[responseSize];
@@ -541,10 +541,10 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 
         //The R expression c() evaluates to something with class NULL,
         //not a vector.
-        if (!isVector(regressionMethods) && !isNull(regressionMethods)) {
-          error("Did not get vector for regressionMethods");
+        if (!Rf_isVector(regressionMethods) && !Rf_isNull(regressionMethods)) {
+          perror("Did not get vector for regressionMethods");
         }
-        const int numMethods = length(regressionMethods);
+        const int numMethods = Rf_length(regressionMethods);
         set<string> methods;
         for (int i = 0; i < numMethods; ++i) {
             methods.insert(CHAR(STRING_ELT(regressionMethods, i)));
@@ -567,35 +567,35 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 		}
 
 		if (numEstimates != numMethods) {
-			warning("Got back fewer estimates than expected.");
+			Rf_warning("Got back fewer estimates than expected.");
 		}
 
 
 
 
 		SEXP answer = 0;
-		PROTECT(answer = allocVector(VECSXP, numEstimates));
+		PROTECT(answer = Rf_allocVector(VECSXP, numEstimates));
 
 		SEXP names = 0;
-		PROTECT(names = allocVector(STRSXP, numEstimates));
+		PROTECT(names = Rf_allocVector(STRSXP, numEstimates));
 		int answerIndex = 0;
 		for (int i = 0; i != numberOfRegressionMethods; ++i) {
 			if (results[i]) {
-				SET_STRING_ELT(names, answerIndex, mkChar(regressionMethodNames[i]));
+				SET_STRING_ELT(names, answerIndex, Rf_mkChar(regressionMethodNames[i]));
 
 				SEXP estimate = 0;
-				PROTECT(estimate = allocVector(VECSXP, 2));
+				PROTECT(estimate = Rf_allocVector(VECSXP, 2));
 				SEXP estimateNames = 0;
-				PROTECT(estimateNames = allocVector(STRSXP, 2));
-				SET_STRING_ELT(estimateNames, 0, mkChar("level"));
-				SET_STRING_ELT(estimateNames, 1, mkChar("slope"));
-				namesgets(estimate, estimateNames);
+				PROTECT(estimateNames = Rf_allocVector(STRSXP, 2));
+				SET_STRING_ELT(estimateNames, 0, Rf_mkChar("level"));
+				SET_STRING_ELT(estimateNames, 1, Rf_mkChar("slope"));
+				Rf_namesgets(estimate, estimateNames);
 				UNPROTECT(1);
 
 				SEXP level = 0;
-				PROTECT(level = allocVector(REALSXP, responseSize));
+				PROTECT(level = Rf_allocVector(REALSXP, responseSize));
 				SEXP slope = 0;
-				PROTECT(slope = allocVector(REALSXP, responseSize));
+				PROTECT(slope = Rf_allocVector(REALSXP, responseSize));
 				for (int j = 0; j != responseSize; ++j) {
                     const double beta = results[i][j].steigung;
 					REAL(slope)[j] = beta;
@@ -613,22 +613,22 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 				++answerIndex;
 			}
 		}
-		namesgets(answer, names);
+		Rf_namesgets(answer, names);
 
 		SEXP mainAnswer = 0;
 		SEXP mainNames  = 0;
-		PROTECT(mainAnswer = allocVector(VECSXP, 2));
-		PROTECT(mainNames  = allocVector(STRSXP, 2));
-		SET_STRING_ELT(mainNames, 0, mkChar("Error_State"));
-		SET_STRING_ELT(mainNames, 1, mkChar("Estimation_Result"));
+		PROTECT(mainAnswer = Rf_allocVector(VECSXP, 2));
+		PROTECT(mainNames  = Rf_allocVector(STRSXP, 2));
+		SET_STRING_ELT(mainNames, 0, Rf_mkChar("Error_State"));
+		SET_STRING_ELT(mainNames, 1, Rf_mkChar("Estimation_Result"));
 		SEXP eState = 0;
 
-		PROTECT(eState = allocVector(INTSXP, 1));
+		PROTECT(eState = Rf_allocVector(INTSXP, 1));
 		SET_VECTOR_ELT(mainAnswer, 0, eState);
 		SET_VECTOR_ELT(mainAnswer, 1, answer);
 
 		INTEGER(eState)[0] = errorState;
-		namesgets(mainAnswer, mainNames);
+		Rf_namesgets(mainAnswer, mainNames);
 		UNPROTECT(3);
 		UNPROTECT(2);
  
@@ -663,7 +663,7 @@ __declspec(dllexport)
                                        minNumNonNAs);
   }
   catch (std::exception & e) {
-    error("%s", e.what());
+    perror(e.what());
   }
   return result;
 }
