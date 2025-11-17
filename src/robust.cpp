@@ -14,6 +14,7 @@
 #include "hammock.h"
 #include "LQDAdvanced.h"
 #include "MedianFilter.h"
+#include "backports.h"
 
 #include "RegLine.h"
 #include <Rinternals.h>    // R einbinden
@@ -509,7 +510,7 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
                                SEXP centreExp, SEXP h, SEXP extrapolation, SEXP minNumNonNAsExp)
 	{
 
-     if (!Rf_isVector(response) && !Rf_isVectorizable(response) && !Rf_isFrame(response)) {
+     if (!Rf_isVector(response) && !Rf_isVectorizable(response) && !Rf_isDataFrame(response)) {
         perror("response is neither a data.frame nor vectorizable!");
      }
      //XXX! Why not just always require a double vector, forcing the caller
@@ -518,7 +519,7 @@ enum { lqdIndex, rmIndex, lmsIndex, ltsIndex, drIndex, medIndex};
 
 	// Daten aus response einlesen
 	    SEXP column = 0;
-		if (Rf_isFrame(response)) {
+		if (Rf_isDataFrame(response)) {
 			PROTECT(column = Rf_coerceVector(VECTOR_ELT(response, 0), REALSXP));
 		}
 		else {
